@@ -83,7 +83,10 @@ func echo(w http.ResponseWriter, r *http.Request) {
 			}
 
 			// 清除连接
+			clients_mutex.Lock()
 			delete(clients, c)
+			clients_mutex.Unlock()
+
 			err = c.Close()
 			if err != nil {
 				log.Printf("连接关闭错误 %v", err)
@@ -103,6 +106,7 @@ func echo(w http.ResponseWriter, r *http.Request) {
 
 		// 初始化链接的id
 		if clients[c] == nil {
+
 			clients_mutex.Lock()
 
 			clients[c] = &pb.BotStatusRequest{
