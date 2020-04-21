@@ -3,6 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="c8e158b9-f9a9-4bb5-87c3-3fb492709dba" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_resource/dist/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/web_resource/dist/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_resource/dist/js/app.567a7162.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_resource/dist/js/app.567a7162.js.map" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/web_resource/src/Space.js" beforeDir="false" afterPath="$PROJECT_DIR$/web_resource/src/Space.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -11,32 +14,44 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="DockManager">
-    <window id="1">
-      <content type="file-editors">
-        <state>
-          <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-            <file pinned="false" current-in-tab="true">
-              <entry file="file://$PROJECT_DIR$/web_resource/src/Space.js">
-                <provider selected="true" editor-type-id="text-editor">
-                  <state relative-caret-position="1339">
-                    <caret line="914" column="107" selection-start-line="914" selection-start-column="107" selection-end-line="914" selection-end-column="107" />
-                    <folding>
-                      <element signature="n#style#0;n#span#0;n#!!top" expanded="true" />
-                      <element signature="n#style#0;n#span#0;n#!!top" expanded="true" />
-                      <element signature="n#style#0;n#a#0;n#p#7;n#!!top" expanded="true" />
-                    </folding>
-                  </state>
-                </provider>
-              </entry>
-            </file>
-          </leaf>
-        </state>
-      </content>
-    </window>
-  </component>
   <component name="FileEditorManager">
-    <leaf />
+    <leaf>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/web_resource/src/Space.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="334">
+              <caret line="726" column="48" selection-start-line="726" selection-start-column="48" selection-end-line="726" selection-end-column="48" />
+              <folding>
+                <element signature="n#style#0;n#span#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#span#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#a#0;n#p#7;n#!!top" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/main.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="474">
+              <caret line="120" column="36" selection-start-line="120" selection-start-column="29" selection-end-line="120" selection-end-column="36" />
+              <folding>
+                <element signature="e#14#170#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/web_resource/src/components/Donghua.vue">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="306">
+              <caret line="18" column="9" selection-start-line="18" selection-start-column="9" selection-end-line="18" selection-end-column="9" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -50,6 +65,8 @@
       <find>message-波</find>
       <find>socket</find>
       <find>maxlen</find>
+      <find>chat</find>
+      <find>chat.os</find>
     </findStrings>
   </component>
   <component name="GOROOT" path="/usr/local/Cellar/go/1.13.5/libexec" />
@@ -73,7 +90,7 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds">
+  <component name="ProjectFrameBounds" fullScreen="true">
     <option name="y" value="23" />
     <option name="width" value="1680" />
     <option name="height" value="1027" />
@@ -157,7 +174,7 @@
     </option>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1680" height="1027" extended-state="6" />
+    <frame x="0" y="0" width="1680" height="1050" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25885227" />
@@ -306,6 +323,16 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/main.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="474">
+          <caret line="120" column="36" selection-start-line="120" selection-start-column="29" selection-end-line="120" selection-end-column="36" />
+          <folding>
+            <element signature="e#14#170#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/web_resource/src/components/Donghua.vue">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="306">
@@ -313,20 +340,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="303">
-          <caret line="116" column="42" selection-start-line="116" selection-start-column="42" selection-end-line="116" selection-end-column="42" />
-          <folding>
-            <element signature="e#14#170#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/web_resource/src/Space.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1339">
-          <caret line="914" column="107" selection-start-line="914" selection-start-column="107" selection-end-line="914" selection-end-column="107" />
+        <state relative-caret-position="334">
+          <caret line="726" column="48" selection-start-line="726" selection-start-column="48" selection-end-line="726" selection-end-column="48" />
           <folding>
             <element signature="n#style#0;n#span#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#span#0;n#!!top" expanded="true" />
