@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+
+message botStatusRequest {
+    string bot_id = 1;
+    float x = 2;
+    float y = 3;
+    float eye_x = 4;
+    float eye_y = 5;
+    string msg = 6;
+    float real_x = 7;
+    float real_y = 8;
+
+    enum status_type {
+        waiting = 0;
+        connecting = 1;
+        close = 2;
+    }
+    status_type status = 9;
+    string name = 10;
+
+
+}
+
+message botStatusResponse {
+    repeated botStatusRequest bot_status = 1;
+}
