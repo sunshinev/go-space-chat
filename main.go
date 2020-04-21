@@ -24,12 +24,10 @@ var upgrader = websocket.Upgrader{}
 func main() {
 	flag.Parse()
 
-	err := http.ListenAndServe(*web_addr, http.FileServer(http.Dir("web_resource/dist/")))
-	if err != nil {
-		log.Fatalf("web 服务启动失败 %v",err)
-	}
+	go http.ListenAndServe(*web_addr, http.FileServer(http.Dir("web_resource/dist/")))
 
-	log.Print("web 服务启动成功")
+
+	log.Printf("web 服务启动成功 端口 %s",*web_addr)
 
 	http.HandleFunc("/ws", echo)
 	// 广播
@@ -40,13 +38,12 @@ func main() {
 		log.Println(http.ListenAndServe("localhost:6060", nil))
 	}()
 
+	log.Printf("socket 服务启动端口 %s", *socket_addr)
 	// 这里的ListenAndServe 已经a开启了goroutine协程了
-	err = http.ListenAndServe(*socket_addr, nil)
+	err := http.ListenAndServe(*socket_addr, nil)
 	if err != nil {
 		log.Fatalf("create error %v", err)
 	}
-
-	log.Print("socket 服务启动成功")
 }
 
 // 这个echo是在serve协程里面运行的
