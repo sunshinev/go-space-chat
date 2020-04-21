@@ -2,11 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c8e158b9-f9a9-4bb5-87c3-3fb492709dba" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_resource/dist/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/web_resource/dist/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_resource/dist/js/app.567a7162.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_resource/dist/js/app.567a7162.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_resource/src/Space.js" beforeDir="false" afterPath="$PROJECT_DIR$/web_resource/src/Space.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -16,11 +12,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/web_resource/src/Space.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="334">
-              <caret line="726" column="48" selection-start-line="726" selection-start-column="48" selection-end-line="726" selection-end-column="48" />
+            <state relative-caret-position="-466">
+              <caret line="741" column="40" lean-forward="true" selection-start-line="741" selection-start-column="40" selection-end-line="741" selection-end-column="40" />
               <folding>
                 <element signature="n#style#0;n#span#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#span#0;n#!!top" expanded="true" />
@@ -30,11 +26,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="474">
-              <caret line="120" column="36" selection-start-line="120" selection-start-column="29" selection-end-line="120" selection-end-column="36" />
+            <state relative-caret-position="299">
+              <caret line="107" column="12" selection-start-line="107" selection-start-column="12" selection-end-line="107" selection-end-column="12" />
               <folding>
                 <element signature="e#14#170#0" expanded="true" />
               </folding>
@@ -85,8 +81,8 @@
         <option value="$PROJECT_DIR$/web_resource/src/App.vue" />
         <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/web_resource/.gitignore" />
-        <option value="$PROJECT_DIR$/main.go" />
         <option value="$PROJECT_DIR$/web_resource/src/Space.js" />
+        <option value="$PROJECT_DIR$/main.go" />
       </list>
     </option>
   </component>
@@ -323,16 +319,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="474">
-          <caret line="120" column="36" selection-start-line="120" selection-start-column="29" selection-end-line="120" selection-end-column="36" />
-          <folding>
-            <element signature="e#14#170#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/web_resource/src/components/Donghua.vue">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="306">
@@ -342,12 +328,22 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/web_resource/src/Space.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="334">
-          <caret line="726" column="48" selection-start-line="726" selection-start-column="48" selection-end-line="726" selection-end-column="48" />
+        <state relative-caret-position="-466">
+          <caret line="741" column="40" lean-forward="true" selection-start-line="741" selection-start-column="40" selection-end-line="741" selection-end-column="40" />
           <folding>
             <element signature="n#style#0;n#span#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#span#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#a#0;n#p#7;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="299">
+          <caret line="107" column="12" selection-start-line="107" selection-start-column="12" selection-end-line="107" selection-end-column="12" />
+          <folding>
+            <element signature="e#14#170#0" expanded="true" />
           </folding>
         </state>
       </provider>

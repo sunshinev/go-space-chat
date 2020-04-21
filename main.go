@@ -8,10 +8,13 @@ import (
 	"log"
 	"net/http"
 	_ "net/http/pprof"
+	"sync"
 )
 
 // 客户端集合
 var clients = make(map[*websocket.Conn]*pb.BotStatusRequest)
+
+var clients_mutex sync.RWMutex;
 
 // 消息缓冲通道
 var messages = make(chan *pb.BotStatusRequest, 100)
@@ -100,6 +103,9 @@ func echo(w http.ResponseWriter, r *http.Request) {
 
 		// 初始化链接的id
 		if clients[c] == nil {
+			clients_mutex.Lock()
+			defer clients_mutex.Unlock()
+			
 			clients[c] = &pb.BotStatusRequest{
 				BotId:  pbr.GetBotId(),
 				Status: pb.BotStatusRequest_connecting,
@@ -118,6 +124,9 @@ func boardcast() {
 		}
 		// 读取到之后进行广播，启动协程，是为了立即处理下一条msg
 		go func() {
+
+			clients_mutex.RLock()
+			defer clients_mutex.RUnlock();
 			for cli := range clients {
 				// protobuf协议
 				if clients[cli].BotId == msg.BotId {
