@@ -1,5 +1,9 @@
 ##  Star ☆ 游戏
 
+## Demo
+
+http://chat.osinger.com/
+
 ## 介绍
 
 项目打造了一个模拟太空的环境，通过canvas 2d来模拟了3D的视觉效果。
