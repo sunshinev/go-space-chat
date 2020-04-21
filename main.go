@@ -104,12 +104,13 @@ func echo(w http.ResponseWriter, r *http.Request) {
 		// 初始化链接的id
 		if clients[c] == nil {
 			clients_mutex.Lock()
-			defer clients_mutex.Unlock()
-			
+
 			clients[c] = &pb.BotStatusRequest{
 				BotId:  pbr.GetBotId(),
 				Status: pb.BotStatusRequest_connecting,
 			}
+
+			clients_mutex.Unlock()
 		}
 
 		messages <- pbr
