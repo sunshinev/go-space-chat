@@ -721,7 +721,7 @@ import "google-protobuf"
 import "./proto/star_pb.js"
 
 function createWebSocket() {
-    ws = new WebSocket("ws://localhost:9000/ws")
+    ws = new WebSocket("ws://chat.osinger.com:9000/ws")
 
     ws.binaryType = 'arraybuffer';
 
