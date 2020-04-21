@@ -4,8 +4,8 @@ import (
 	"flag"
 	"github.com/golang/protobuf/proto"
 	"github.com/gorilla/websocket"
-	"log"
 	pb "go-space-chat/proto/star"
+	"log"
 	"net/http"
 	_ "net/http/pprof"
 )
@@ -73,8 +73,7 @@ func echo(w http.ResponseWriter, r *http.Request) {
 			}
 
 			// 清除连接
-			delete(clients,c);
-
+			delete(clients, c);
 			err = c.Close();
 			if err != nil {
 				log.Printf("连接关闭错误 %v", err)
