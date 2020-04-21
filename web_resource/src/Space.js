@@ -814,7 +814,7 @@ function initTools() {
         "border-radius:5px;");
     document.body.appendChild(tool_box);
 
-    let name = createBtn(tool_box,'+','');
+    let name = createBtn(tool_box,'image/human.png','点我修改昵称');
 
     var input = null;
 
@@ -854,20 +854,24 @@ function initTools() {
             input = null;
         })
     })
+
 }
 
-function createBtn(tool_box, icon, title) {
-    var button = document.createElement("span")
+function createBtn(tool_box, src, title = '') {
+    var button = document.createElement("img")
     button.setAttribute("style", "" +
-        "display:inline-block;" +
+        // "display:inline-block;" +
         "width:25px;" +
         "height:25px;" +
-        "background-color:rgba(200,200,0,0.5);" +
+        // "background-color:rgba(200,200,0,0.5);" +
         "border:1px solid rgba(200,200,0,0.5);" +
         "color:white;" +
         "cursor:default;" +
         "border-radius:5px;");
-    button.innerText = icon;
+
+    button.setAttribute('src',src);
+    button.setAttribute('title',title);
+
     tool_box.appendChild(button);
 
     return button;
@@ -888,9 +892,13 @@ function createReadme() {
         "border-radius:5px;");
     readme.innerHTML = "" +
         "<p>欢迎进入游戏《Star ☆》</p>" +
-        "<p>作者GIT：<a href='http://https://github.com/sunshinev/go-space-chat'>http://https://github.com/sunshinev/go-space-chat</a></p>"+
         "<p>可以体验畅游于太空的匿名聊天，以及无限星空</p>" +
         "<p>概念来自EVE游戏，以及蝌蚪聊天室，不过该游戏代码都是全新实现的</p>" +
+        "<p>操作方式：</p>" +
+        "<p>1. W A S D进行上下左右</p>" +
+        "<p>2. 空格开启聊天框，回车发送消息</p>" +
+        "<p>3. 左上角修改昵称，点击空白修改成功</p>" +
+        "<p>作者GIT：<a href='http://https://github.com/sunshinev/go-space-chat' style='color:rgba(200,200,200,0.8)'>http://https://github.com/sunshinev/go-space-chat</a></p>"+
         "<p>前端 Vue+canvas+websocket+protobuf</p>" +
         "<p>后端 Golang+websocket+protobuf+goroutine</p>";
 
