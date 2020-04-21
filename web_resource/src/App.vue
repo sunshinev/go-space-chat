@@ -22,8 +22,10 @@
   body{
     margin: 0px;
     padding: 0px;
-    /*position: fixed;*/
-    /*top: 0px;*/
-    /*left: 0px;*/
+    overflow: hidden;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    font-size: 12px;
   }
 </style>

@@ -883,17 +883,16 @@ function createReadme() {
         "height:50;" +
         // "background-color:rgba(200,200,0,0.5);" +
         // "border:1px solid rgba(200,200,0,0.5);" +
-        "color:rgba(200,200,200,0.5);" +
+        "color:rgba(200,200,200,0.8);" +
         "cursor:default;" +
         "border-radius:5px;");
     readme.innerHTML = "" +
         "<p>欢迎进入游戏《Star ☆》</p>" +
+        "<p>作者GIT：<a href='http://https://github.com/sunshinev/go-space-chat'>http://https://github.com/sunshinev/go-space-chat</a></p>"+
         "<p>可以体验畅游于太空的匿名聊天，以及无限星空</p>" +
         "<p>概念来自EVE游戏，以及蝌蚪聊天室，不过该游戏代码都是全新实现的</p>" +
         "<p>前端 Vue+canvas+websocket+protobuf</p>" +
-        "<p>后端 Golang+websocket+protobuf+goroutine</p>" +
-        "<p><a href='http://https://github.com/sunshinev/go-space-chat'>作者GIT：http://https://github.com/sunshinev/go-space-chat</a></p>";
-
+        "<p>后端 Golang+websocket+protobuf+goroutine</p>";
 
     document.body.appendChild(readme)
 }
