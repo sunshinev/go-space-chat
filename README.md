@@ -1,8 +1,12 @@
 ##  Star ☆ 游戏
 
+![abc7178898c1ead114f64ec437cb41f81587469886.jpg](https://github.com/sunshinev/remote_pics/raw/master/abc7178898c1ead114f64ec437cb41f81587469886.jpg)
+
 ## Demo
 
 http://chat.osinger.com/
+
+
 
 ## 介绍
 
