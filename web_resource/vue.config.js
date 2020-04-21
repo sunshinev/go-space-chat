@@ -1,4 +1,4 @@
 module.exports = {
     publicPath:"/",
-    filenameHashing:true
-}
+    filenameHashing:true,
+};
