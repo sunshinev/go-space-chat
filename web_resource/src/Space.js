@@ -1,3 +1,13 @@
+/**
+ * author huajie.sun
+ * from china
+ * 2020年04月21日15:41:35
+ * https://github.com/sunshinev/go-space-chat
+ * license MIT
+ * @type {null}
+ */
+
+
 var ctx = null;
 var canvas = null;
 
