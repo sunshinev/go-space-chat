@@ -912,7 +912,7 @@ function createReadme() {
         "<p>1. W A S D进行上下左右</p>" +
         "<p>2. 空格开启聊天框，回车发送消息</p>" +
         "<p>3. 左上角修改昵称，点击空白修改成功</p>" +
-        "<p>作者GIT：<a href='http://https://github.com/sunshinev/go-space-chat' style='color:rgba(200,200,200,0.8)'>http://https://github.com/sunshinev/go-space-chat</a></p>"+
+        "<p>作者GIT：<a href='https://github.com/sunshinev/go-space-chat' style='color:rgba(200,200,200,0.8)'>https://github.com/sunshinev/go-space-chat</a></p>"+
         "<p>前端 Vue+canvas+websocket+protobuf</p>" +
         "<p>后端 Golang+websocket+protobuf+goroutine</p>";
 
