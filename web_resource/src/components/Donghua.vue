@@ -7,7 +7,6 @@
 
     import Space from "../Space.js"
 
-
     export default {
         data() {
             return {}

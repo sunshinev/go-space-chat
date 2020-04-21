@@ -2,28 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c8e158b9-f9a9-4bb5-87c3-3fb492709dba" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/web_server/server.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_page/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/web_resource/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_page/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/web_resource/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_page/babel.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/web_resource/babel.config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_page/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/web_resource/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_page/public/favicon.ico" beforeDir="false" afterPath="$PROJECT_DIR$/web_resource/public/favicon.ico" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_page/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/web_resource/public/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_page/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/web_resource/src/App.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_page/src/Space.js" beforeDir="false" afterPath="$PROJECT_DIR$/web_resource/src/Space.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_page/src/Space.v2.js" beforeDir="false" afterPath="$PROJECT_DIR$/web_resource/src/Space.v2.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_page/src/assets/logo.png" beforeDir="false" afterPath="$PROJECT_DIR$/web_resource/src/assets/logo.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_page/src/components/Body.vue" beforeDir="false" afterPath="$PROJECT_DIR$/web_resource/src/components/Body.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_page/src/components/Donghua.vue" beforeDir="false" afterPath="$PROJECT_DIR$/web_resource/src/components/Donghua.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_page/src/components/Header.vue" beforeDir="false" afterPath="$PROJECT_DIR$/web_resource/src/components/Header.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_page/src/components/HelloWorld.vue" beforeDir="false" afterPath="$PROJECT_DIR$/web_resource/src/components/HelloWorld.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_page/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/web_resource/src/main.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_page/src/proto/chat_pb.js" beforeDir="false" afterPath="$PROJECT_DIR$/web_resource/src/proto/chat_pb.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_page/src/proto/star_pb.js" beforeDir="false" afterPath="$PROJECT_DIR$/web_resource/src/proto/star_pb.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_page/vue.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/web_resource/vue.config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web_page/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/web_resource/yarn.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_resource/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/web_resource/src/App.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_resource/src/Space.v2.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_resource/src/components/Body.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_resource/src/components/Donghua.vue" beforeDir="false" afterPath="$PROJECT_DIR$/web_resource/src/components/Donghua.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_resource/src/components/Header.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_resource/src/components/HelloWorld.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_resource/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/web_resource/src/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_resource/src/proto/chat_pb.js" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -33,13 +19,55 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="700">
-              <caret line="48" column="30" lean-forward="true" selection-start-line="48" selection-start-column="30" selection-end-line="48" selection-end-column="30" />
+            <state relative-caret-position="411">
+              <caret line="31" column="27" lean-forward="true" selection-start-line="31" selection-start-column="27" selection-end-line="31" selection-end-column="27" />
               <folding>
                 <element signature="e#14#170#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/web_resource/src/components/Donghua.vue">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="306">
+              <caret line="18" column="9" selection-start-line="18" selection-start-column="9" selection-end-line="18" selection-end-column="9" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/web_resource/src/App.vue">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="255">
+              <caret line="15" lean-forward="true" selection-start-line="15" selection-end-line="15" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/web_resource/src/Space.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state>
+              <folding>
+                <element signature="n#style#0;n#span#0;n#!!top" expanded="true" />
+                <element signature="n#style#0;n#span#0;n#!!top" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/web_resource/src/main.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="34">
+              <caret line="2" lean-forward="true" selection-start-line="2" selection-end-line="2" />
+              <folding>
+                <element signature="e#0#21#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -69,6 +97,9 @@
         <option value="$PROJECT_DIR$/go.mod" />
         <option value="$PROJECT_DIR$/web_server/server.go" />
         <option value="$PROJECT_DIR$/main.go" />
+        <option value="$PROJECT_DIR$/web_resource/src/main.js" />
+        <option value="$PROJECT_DIR$/web_resource/src/components/Donghua.vue" />
+        <option value="$PROJECT_DIR$/web_resource/src/App.vue" />
       </list>
     </option>
   </component>
@@ -94,6 +125,26 @@
               <item name="go-space-chat" type="b2602c69:ProjectViewProjectNode" />
               <item name="go-space-chat" type="462c0819:PsiDirectoryNode" />
               <item name="web_resource" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="go-space-chat" type="b2602c69:ProjectViewProjectNode" />
+              <item name="go-space-chat" type="462c0819:PsiDirectoryNode" />
+              <item name="web_resource" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="go-space-chat" type="b2602c69:ProjectViewProjectNode" />
+              <item name="go-space-chat" type="462c0819:PsiDirectoryNode" />
+              <item name="web_resource" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="components" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="go-space-chat" type="b2602c69:ProjectViewProjectNode" />
+              <item name="go-space-chat" type="462c0819:PsiDirectoryNode" />
+              <item name="web_resource" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="proto" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="go-space-chat" type="b2602c69:ProjectViewProjectNode" />
@@ -226,11 +277,48 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/main.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="700">
-          <caret line="48" column="30" lean-forward="true" selection-start-line="48" selection-start-column="30" selection-end-line="48" selection-end-column="30" />
+        <state relative-caret-position="411">
+          <caret line="31" column="27" lean-forward="true" selection-start-line="31" selection-start-column="27" selection-end-line="31" selection-end-column="27" />
           <folding>
             <element signature="e#14#170#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web_resource/src/components/Body.vue">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web_resource/src/Space.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="n#style#0;n#span#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#span#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web_resource/src/main.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="2" lean-forward="true" selection-start-line="2" selection-end-line="2" />
+          <folding>
+            <element signature="e#0#21#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web_resource/src/components/Donghua.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="18" column="9" selection-start-line="18" selection-start-column="9" selection-end-line="18" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web_resource/src/App.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="15" lean-forward="true" selection-start-line="15" selection-end-line="15" />
         </state>
       </provider>
     </entry>
