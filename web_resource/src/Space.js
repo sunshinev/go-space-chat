@@ -502,6 +502,9 @@ function createInput() {
         "color:white;" +
         "font-size:12px"
     );
+
+    input.setAttribute('maxlength',50);
+
     document.body.appendChild(input)
     input.addEventListener('focus', () => {
     });
@@ -848,7 +851,8 @@ function initTools() {
             "font-size:12px"
         );
 
-        input.setAttribute('placeholder','请输入昵称')
+        input.setAttribute('placeholder','请输入昵称，长度10')
+        input.setAttribute('maxlength',10);
 
         document.body.appendChild(input)
         input.focus();
