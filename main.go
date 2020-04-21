@@ -26,8 +26,7 @@ func main() {
 
 	go http.ListenAndServe(*web_addr, http.FileServer(http.Dir("web_resource/dist/")))
 
-
-	log.Printf("web 服务启动成功 端口 %s",*web_addr)
+	log.Printf("web 服务启动成功 端口 %s", *web_addr)
 
 	http.HandleFunc("/ws", echo)
 	// 广播
@@ -81,8 +80,8 @@ func echo(w http.ResponseWriter, r *http.Request) {
 			}
 
 			// 清除连接
-			delete(clients, c);
-			err = c.Close();
+			delete(clients, c)
+			err = c.Close()
 			if err != nil {
 				log.Printf("连接关闭错误 %v", err)
 			}
@@ -114,6 +113,9 @@ func echo(w http.ResponseWriter, r *http.Request) {
 func boardcast() {
 	// 始终读取messages
 	for msg := range messages {
+		if msg.Msg != "" {
+			log.Printf("%s : %s", msg.BotId+":"+msg.Name, msg.Msg)
+		}
 		// 读取到之后进行广播，启动协程，是为了立即处理下一条msg
 		go func() {
 			for cli := range clients {
