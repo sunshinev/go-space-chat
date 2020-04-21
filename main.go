@@ -82,8 +82,8 @@ func echo(w http.ResponseWriter, r *http.Request) {
 				Status: pb.BotStatusRequest_close,
 			}
 
-			// 清除连接
 			clients_mutex.Lock()
+			// 清除连接
 			delete(clients, c)
 			clients_mutex.Unlock()
 
@@ -108,12 +108,10 @@ func echo(w http.ResponseWriter, r *http.Request) {
 		if clients[c] == nil {
 
 			clients_mutex.Lock()
-
 			clients[c] = &pb.BotStatusRequest{
 				BotId:  pbr.GetBotId(),
 				Status: pb.BotStatusRequest_connecting,
 			}
-
 			clients_mutex.Unlock()
 		}
 
@@ -129,7 +127,6 @@ func boardcast() {
 		}
 		// 读取到之后进行广播，启动协程，是为了立即处理下一条msg
 		go func() {
-
 			clients_mutex.RLock()
 			defer clients_mutex.RUnlock();
 			for cli := range clients {
