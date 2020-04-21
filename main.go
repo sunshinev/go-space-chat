@@ -16,6 +16,8 @@ var clients = make(map[*websocket.Conn]*pb.BotStatusRequest)
 
 var clients_mutex sync.RWMutex;
 
+var conn_mutex sync.RWMutex;
+
 // 消息缓冲通道
 var messages = make(chan *pb.BotStatusRequest, 100)
 
@@ -142,10 +144,12 @@ func boardcast() {
 				}
 
 				// 二进制发送
+				conn_mutex.Lock()
 				err = cli.WriteMessage(websocket.BinaryMessage, b)
 				if err != nil {
 					log.Printf("%v", err)
 				}
+				conn_mutex.Unlock()
 			}
 		}()
 	}
