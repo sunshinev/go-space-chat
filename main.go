@@ -16,26 +16,37 @@ var clients = make(map[*websocket.Conn]*pb.BotStatusRequest)
 // 消息缓冲通道
 var messages = make(chan *pb.BotStatusRequest, 100)
 
-var addr = flag.String("addr", ":9000", "http service address")
+var socket_addr = flag.String("socket_addr", ":9000", "socket address")
+var web_addr = flag.String("web_addr", ":80", "http service address")
+
 var upgrader = websocket.Upgrader{}
 
 func main() {
 	flag.Parse()
+
+	err := http.ListenAndServe(*web_addr, http.FileServer(http.Dir("web_resource/dist/")))
+	if err != nil {
+		log.Fatalf("web 服务启动失败 %v",err)
+	}
+
+	log.Print("web 服务启动成功")
 
 	http.HandleFunc("/ws", echo)
 	// 广播
 	go boardcast()
 
 	// pprof
-	//go func() {
-	//	log.Println(http.ListenAndServe("localhost:6060", nil))
-	//}()
+	go func() {
+		log.Println(http.ListenAndServe("localhost:6060", nil))
+	}()
 
 	// 这里的ListenAndServe 已经a开启了goroutine协程了
-	err := http.ListenAndServe(*addr, nil)
+	err = http.ListenAndServe(*socket_addr, nil)
 	if err != nil {
 		log.Fatalf("create error %v", err)
 	}
+
+	log.Print("socket 服务启动成功")
 }
 
 // 这个echo是在serve协程里面运行的

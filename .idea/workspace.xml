@@ -2,9 +2,28 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c8e158b9-f9a9-4bb5-87c3-3fb492709dba" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/web_server/server.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/proto/star/star.pb.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_page/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/web_resource/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_page/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/web_resource/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_page/babel.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/web_resource/babel.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_page/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/web_resource/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_page/public/favicon.ico" beforeDir="false" afterPath="$PROJECT_DIR$/web_resource/public/favicon.ico" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_page/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/web_resource/public/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_page/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/web_resource/src/App.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_page/src/Space.js" beforeDir="false" afterPath="$PROJECT_DIR$/web_resource/src/Space.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_page/src/Space.v2.js" beforeDir="false" afterPath="$PROJECT_DIR$/web_resource/src/Space.v2.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_page/src/assets/logo.png" beforeDir="false" afterPath="$PROJECT_DIR$/web_resource/src/assets/logo.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_page/src/components/Body.vue" beforeDir="false" afterPath="$PROJECT_DIR$/web_resource/src/components/Body.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_page/src/components/Donghua.vue" beforeDir="false" afterPath="$PROJECT_DIR$/web_resource/src/components/Donghua.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_page/src/components/Header.vue" beforeDir="false" afterPath="$PROJECT_DIR$/web_resource/src/components/Header.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_page/src/components/HelloWorld.vue" beforeDir="false" afterPath="$PROJECT_DIR$/web_resource/src/components/HelloWorld.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_page/src/main.js" beforeDir="false" afterPath="$PROJECT_DIR$/web_resource/src/main.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_page/src/proto/chat_pb.js" beforeDir="false" afterPath="$PROJECT_DIR$/web_resource/src/proto/chat_pb.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_page/src/proto/star_pb.js" beforeDir="false" afterPath="$PROJECT_DIR$/web_resource/src/proto/star_pb.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_page/vue.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/web_resource/vue.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web_page/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/web_resource/yarn.lock" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -14,11 +33,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="369">
-              <caret line="22" column="16" lean-forward="true" selection-start-line="22" selection-start-column="16" selection-end-line="22" selection-end-column="16" />
+            <state relative-caret-position="700">
+              <caret line="48" column="30" lean-forward="true" selection-start-line="48" selection-start-column="30" selection-end-line="48" selection-end-column="30" />
               <folding>
                 <element signature="e#14#170#0" expanded="true" />
               </folding>
@@ -26,25 +45,14 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/proto/star/star.pb.go">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="19" column="36" selection-start-line="19" selection-start-column="36" selection-end-line="19" selection-end-column="36" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/go.mod">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
-            </state>
-          </provider>
-        </entry>
-      </file>
     </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Go File" />
+      </list>
+    </option>
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
@@ -59,6 +67,7 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/go.mod" />
+        <option value="$PROJECT_DIR$/web_server/server.go" />
         <option value="$PROJECT_DIR$/main.go" />
       </list>
     </option>
@@ -84,13 +93,7 @@
             <path>
               <item name="go-space-chat" type="b2602c69:ProjectViewProjectNode" />
               <item name="go-space-chat" type="462c0819:PsiDirectoryNode" />
-              <item name="proto" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="go-space-chat" type="b2602c69:ProjectViewProjectNode" />
-              <item name="go-space-chat" type="462c0819:PsiDirectoryNode" />
-              <item name="proto" type="462c0819:PsiDirectoryNode" />
-              <item name="star" type="462c0819:PsiDirectoryNode" />
+              <item name="web_resource" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="go-space-chat" type="b2602c69:ProjectViewProjectNode" />
@@ -103,6 +106,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
+    <property name="DefaultGoTemplateProperty" value="Go File" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="configurable.Global.GOPATH.is.expanded" value="true" />
     <property name="configurable.Module.GOPATH.is.expanded" value="false" />
@@ -168,15 +172,8 @@
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/proto/chat/chat.pb.go" />
-    <entry file="file://$PROJECT_DIR$/web_page/src/proto/chat_pb.js">
+    <entry file="file://$PROJECT_DIR$/web_resource/src/proto/chat_pb.js">
       <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="11" column="5" lean-forward="true" selection-start-line="11" selection-start-column="5" selection-end-line="11" selection-end-column="5" />
-        </state>
-      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/proto/star/star_pb.js">
       <provider selected="true" editor-type-id="text-editor">
@@ -192,23 +189,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/go.sum">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="14" column="83" selection-start-line="14" selection-start-column="83" selection-end-line="14" selection-end-column="83" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/main.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="369">
-          <caret line="22" column="16" lean-forward="true" selection-start-line="22" selection-start-column="16" selection-end-line="22" selection-end-column="16" />
-          <folding>
-            <element signature="e#14#170#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/proto/star/star.pb.go">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
@@ -220,6 +200,37 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
           <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/go.sum">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="14" column="83" selection-start-line="14" selection-start-column="83" selection-end-line="14" selection-end-column="83" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="11" column="5" selection-start-line="11" selection-start-column="5" selection-end-line="11" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web_server/server.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-end-line="5" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/main.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="700">
+          <caret line="48" column="30" lean-forward="true" selection-start-line="48" selection-start-column="30" selection-end-line="48" selection-end-column="30" />
+          <folding>
+            <element signature="e#14#170#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
