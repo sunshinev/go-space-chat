@@ -51,7 +51,7 @@ func main() {
 }
 
 // 这个echo是在serve协程里面运行的
-func echo(w http.ResponseWriter, r *http.Request) {
+func echo(w http.ResponseWriter, r *http.Request) (err error) {
 	// 跨域
 	upgrader.CheckOrigin = func(r *http.Request) bool {
 		return true
@@ -59,7 +59,8 @@ func echo(w http.ResponseWriter, r *http.Request) {
 	// 升级http为websocket
 	c, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
-		log.Fatalf("升级webcoket %v", err)
+		log.Printf("升级webcoket %v", err)
+		return
 	}
 
 	defer func() {
@@ -67,6 +68,7 @@ func echo(w http.ResponseWriter, r *http.Request) {
 		err := c.Close()
 		if err != nil {
 			log.Printf(" defer 释放失败 %v", err)
+			return
 		}
 
 		log.Print("defer 释放成功")
@@ -102,7 +104,7 @@ func echo(w http.ResponseWriter, r *http.Request) {
 		pbr := &pb.BotStatusRequest{}
 		err = proto.Unmarshal(message, pbr)
 		if err != nil {
-			log.Fatalf("proto 解析失败 %v", err)
+			log.Printf("proto 解析失败 %v", err)
 			break
 		}
 
@@ -119,6 +121,8 @@ func echo(w http.ResponseWriter, r *http.Request) {
 
 		messages <- pbr
 	}
+
+	return
 }
 
 func boardcast() {
