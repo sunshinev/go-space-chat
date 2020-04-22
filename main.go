@@ -51,7 +51,7 @@ func main() {
 }
 
 // 这个echo是在serve协程里面运行的
-func echo(w http.ResponseWriter, r *http.Request) (err error) {
+func echo(w http.ResponseWriter, r *http.Request) {
 	// 跨域
 	upgrader.CheckOrigin = func(r *http.Request) bool {
 		return true
@@ -60,69 +60,60 @@ func echo(w http.ResponseWriter, r *http.Request) (err error) {
 	c, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Printf("升级webcoket %v", err)
-		return
-	}
+		w.Write([]byte(err.Error()))
+	}else {
 
-	defer func() {
-		log.Print("defer 释放连接")
-		err := c.Close()
-		if err != nil {
-			log.Printf(" defer 释放失败 %v", err)
-			return
-		}
-
-		log.Print("defer 释放成功")
-	}()
-
-	// 监听
-	for {
-		_, message, err := c.ReadMessage()
-
-		if err != nil {
-			log.Printf("read error 读取失败 ", err)
-			messages <- &pb.BotStatusRequest{
-				BotId: clients[c].BotId,
-				// 广播关闭连接
-				Status: pb.BotStatusRequest_close,
-			}
-
-			clients_mutex.Lock()
-			// 清除连接
-			delete(clients, c)
-			clients_mutex.Unlock()
-
-			err = c.Close()
+		defer func() {
+			err := c.Close()
 			if err != nil {
-				log.Printf("连接关闭错误 %v", err)
+				log.Printf(" defer 释放失败 %v", err)
+			} else {
+				log.Print("defer 释放成功")
 			}
-			log.Print("c 释放成功")
+		}()
 
-			break
-		}
+		// 监听
+		for {
+			_, message, err := c.ReadMessage()
 
-		// 使用protobuf解析
-		pbr := &pb.BotStatusRequest{}
-		err = proto.Unmarshal(message, pbr)
-		if err != nil {
-			log.Printf("proto 解析失败 %v", err)
-			break
-		}
+			if err != nil {
+				log.Printf("read error 读取失败 ", err)
+				messages <- &pb.BotStatusRequest{
+					BotId: clients[c].BotId,
+					// 广播关闭连接
+					Status: pb.BotStatusRequest_close,
+				}
 
-		// 初始化链接的id
-		if clients[c] == nil {
+				clients_mutex.Lock()
+				// 清除连接
+				delete(clients, c)
+				clients_mutex.Unlock()
 
-			clients_mutex.Lock()
-			clients[c] = &pb.BotStatusRequest{
-				BotId:  pbr.GetBotId(),
-				Status: pb.BotStatusRequest_connecting,
+				break
 			}
-			clients_mutex.Unlock()
-		}
 
-		messages <- pbr
+			// 使用protobuf解析
+			pbr := &pb.BotStatusRequest{}
+			err = proto.Unmarshal(message, pbr)
+			if err != nil {
+				log.Printf("proto 解析失败 %v", err)
+				break
+			}
+
+			// 初始化链接的id
+			if clients[c] == nil {
+
+				clients_mutex.Lock()
+				clients[c] = &pb.BotStatusRequest{
+					BotId:  pbr.GetBotId(),
+					Status: pb.BotStatusRequest_connecting,
+				}
+				clients_mutex.Unlock()
+			}
+
+			messages <- pbr
+		}
 	}
-
-	return
 }
 
 func boardcast() {
