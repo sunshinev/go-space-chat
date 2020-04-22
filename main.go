@@ -138,16 +138,17 @@ func boardcast() {
 				pbrp := &pb.BotStatusResponse{BotStatus: []*pb.BotStatusRequest{msg}}
 				b, err := proto.Marshal(pbrp)
 				if err != nil {
-					log.Fatalf("proto marshal error %v", err)
+					log.Printf("proto marshal error %v", err)
+					continue
 				}
 
 				// 二进制发送
 				conn_mutex.Lock()
 				err = cli.WriteMessage(websocket.BinaryMessage, b)
+				conn_mutex.Unlock()
 				if err != nil {
 					log.Printf("%v", err)
 				}
-				conn_mutex.Unlock()
 			}
 		}()
 	}
