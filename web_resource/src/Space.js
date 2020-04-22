@@ -905,8 +905,8 @@ function createReadme() {
         "cursor:default;" +
         "border-radius:5px;");
     readme.innerHTML = "" +
-        "<p>欢迎进入游戏《Star ☆》</p>" +
-        "<p>可以体验畅游于太空的匿名聊天，以及无限星空</p>" +
+        "<p>欢迎进入游戏《孤独Lonely》</p>" +
+        "<p>可以体验畅游于太空的匿名聊天，以及无限星空，以及无尽的孤独</p>" +
         "<p>概念来自EVE游戏，以及蝌蚪聊天室，不过该游戏代码都是全新实现的</p>" +
         "<p>操作方式：</p>" +
         "<p>1. W A S D进行上下左右</p>" +
