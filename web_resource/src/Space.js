@@ -919,6 +919,11 @@ function createReadme() {
     document.body.appendChild(readme)
 }
 
+
+function createDirectionSign() {
+    // 根据两点
+}
+
 export default function () {
     initCtx();
     bindEvent();

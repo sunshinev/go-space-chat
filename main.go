@@ -14,9 +14,9 @@ import (
 // 客户端集合
 var clients = make(map[*websocket.Conn]*pb.BotStatusRequest)
 
-var clients_mutex sync.RWMutex;
+var clients_mutex sync.RWMutex
 
-var conn_mutex sync.RWMutex;
+var conn_mutex sync.RWMutex
 
 // 消息缓冲通道
 var messages = make(chan *pb.BotStatusRequest, 100)
@@ -58,61 +58,64 @@ func echo(w http.ResponseWriter, r *http.Request) {
 	}
 	// 升级http为websocket
 	c, err := upgrader.Upgrade(w, r, nil)
+
 	if err != nil {
 		log.Printf("升级webcoket %v", err)
 		w.Write([]byte(err.Error()))
-	}else {
+	} else {
+		go checkConn(c)
+	}
+}
 
-		defer func() {
-			err := c.Close()
-			if err != nil {
-				log.Printf(" defer 释放失败 %v", err)
-			} else {
-				log.Print("defer 释放成功")
-			}
-		}()
-
-		// 监听
-		for {
-			_, message, err := c.ReadMessage()
-
-			if err != nil {
-				log.Printf("read error 读取失败 ", err)
-				messages <- &pb.BotStatusRequest{
-					BotId: clients[c].BotId,
-					// 广播关闭连接
-					Status: pb.BotStatusRequest_close,
-				}
-
-				clients_mutex.Lock()
-				// 清除连接
-				delete(clients, c)
-				clients_mutex.Unlock()
-
-				break
-			}
-
-			// 使用protobuf解析
-			pbr := &pb.BotStatusRequest{}
-			err = proto.Unmarshal(message, pbr)
-			if err != nil {
-				log.Printf("proto 解析失败 %v", err)
-				break
-			}
-
-			// 初始化链接的id
-			if clients[c] == nil {
-
-				clients_mutex.Lock()
-				clients[c] = &pb.BotStatusRequest{
-					BotId:  pbr.GetBotId(),
-					Status: pb.BotStatusRequest_connecting,
-				}
-				clients_mutex.Unlock()
-			}
-
-			messages <- pbr
+func checkConn(c *websocket.Conn) {
+	defer func() {
+		err := c.Close()
+		if err != nil {
+			log.Printf(" defer 释放失败 %v", err)
+		} else {
+			log.Print("defer 释放成功")
 		}
+	}()
+	// 监听
+	for {
+		_, message, err := c.ReadMessage()
+
+		if err != nil {
+			log.Printf("read error 读取失败 ", err)
+			messages <- &pb.BotStatusRequest{
+				BotId: clients[c].BotId,
+				// 广播关闭连接
+				Status: pb.BotStatusRequest_close,
+			}
+
+			clients_mutex.Lock()
+			// 清除连接
+			delete(clients, c)
+			clients_mutex.Unlock()
+
+			break
+		}
+
+		// 使用protobuf解析
+		pbr := &pb.BotStatusRequest{}
+		err = proto.Unmarshal(message, pbr)
+		if err != nil {
+			log.Printf("proto 解析失败 %v", err)
+			break
+		}
+
+		// 初始化链接的id
+		if clients[c] == nil {
+
+			clients_mutex.Lock()
+			clients[c] = &pb.BotStatusRequest{
+				BotId:  pbr.GetBotId(),
+				Status: pb.BotStatusRequest_connecting,
+			}
+			clients_mutex.Unlock()
+		}
+
+		messages <- pbr
 	}
 }
 
@@ -125,7 +128,7 @@ func boardcast() {
 		// 读取到之后进行广播，启动协程，是为了立即处理下一条msg
 		go func() {
 			clients_mutex.RLock()
-			defer clients_mutex.RUnlock();
+			defer clients_mutex.RUnlock()
 			for cli := range clients {
 				// protobuf协议
 				if clients[cli].BotId == msg.BotId {
