@@ -2,13 +2,14 @@ package main
 
 import (
 	"flag"
-	"github.com/golang/protobuf/proto"
-	"github.com/gorilla/websocket"
 	pb "go-space-chat/proto/star"
 	"log"
 	"net/http"
 	_ "net/http/pprof"
 	"sync"
+
+	"github.com/golang/protobuf/proto"
+	"github.com/gorilla/websocket"
 )
 
 // 客户端集合
