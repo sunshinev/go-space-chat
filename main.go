@@ -1,12 +1,21 @@
 package main
 
 import (
+	"bufio"
 	"flag"
+	"fmt"
 	pb "go-space-chat/proto/star"
+	"io"
 	"log"
 	"net/http"
 	_ "net/http/pprof"
+	"os"
+	"strings"
 	"sync"
+
+	filter "github.com/antlinker/go-dirtyfilter"
+
+	"github.com/antlinker/go-dirtyfilter/store"
 
 	"github.com/golang/protobuf/proto"
 	"github.com/gorilla/websocket"
@@ -27,8 +36,12 @@ var web_addr = flag.String("web_addr", ":80", "http service address")
 
 var upgrader = websocket.Upgrader{}
 
+var words = []string{}
+
 func main() {
 	flag.Parse()
+
+	readWords()
 
 	go http.ListenAndServe(*web_addr, http.FileServer(http.Dir("web_resource/dist/")))
 
@@ -70,12 +83,7 @@ func echo(w http.ResponseWriter, r *http.Request) {
 
 func checkConn(c *websocket.Conn) {
 	defer func() {
-		err := c.Close()
-		if err != nil {
-			log.Printf(" defer 释放失败 %v", err)
-		} else {
-			log.Print("defer 释放成功")
-		}
+		c.Close()
 	}()
 	// 监听
 	for {
@@ -104,6 +112,10 @@ func checkConn(c *websocket.Conn) {
 			log.Printf("proto 解析失败 %v", err)
 			break
 		}
+
+		// 敏感词过滤
+		pbr.Msg = wordsFilter(pbr.Msg)
+		pbr.Name = wordsFilter(pbr.Name)
 
 		// 初始化链接的id
 		if clients[c] == nil {
@@ -153,4 +165,46 @@ func boardcast() {
 			}
 		}()
 	}
+}
+
+func readWords() {
+	fi, err := os.Open("words/gg.txt")
+	if err != nil {
+		fmt.Printf("Error: %s\n", err)
+		return
+	}
+	defer fi.Close()
+
+	br := bufio.NewReader(fi)
+	for {
+		a, _, c := br.ReadLine()
+		if c == io.EOF {
+			break
+		}
+		words = append(words, string(a))
+	}
+
+}
+
+func wordsFilter(filterText string) string {
+
+	memStore, err := store.NewMemoryStore(store.MemoryConfig{
+		DataSource: words,
+	})
+	if err != nil {
+		panic(err)
+	}
+	filterManage := filter.NewDirtyManager(memStore)
+	result, err := filterManage.Filter().Filter(filterText, '*', '@')
+	if err != nil {
+		panic(err)
+	}
+
+	if result != nil {
+		for _, w := range result {
+			filterText = strings.ReplaceAll(filterText, w, "*")
+		}
+	}
+
+	return filterText
 }
