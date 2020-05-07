@@ -3,7 +3,6 @@ package main
 import (
 	"bufio"
 	"flag"
-	"fmt"
 	pb "go-space-chat/proto/star"
 	"io"
 	"log"
@@ -38,10 +37,12 @@ var upgrader = websocket.Upgrader{}
 
 var words = []string{}
 
+var filterManage *filter.DirtyManager
+
 func main() {
 	flag.Parse()
 
-	readWords()
+	filterManage = readWords()
 
 	go http.ListenAndServe(*web_addr, http.FileServer(http.Dir("web_resource/dist/")))
 
@@ -167,11 +168,10 @@ func boardcast() {
 	}
 }
 
-func readWords() {
+func readWords() *filter.DirtyManager {
 	fi, err := os.Open("words/gg.txt")
 	if err != nil {
-		fmt.Printf("Error: %s\n", err)
-		return
+		panic(err.Error())
 	}
 	defer fi.Close()
 
@@ -184,17 +184,17 @@ func readWords() {
 		words = append(words, string(a))
 	}
 
-}
-
-func wordsFilter(filterText string) string {
-
 	memStore, err := store.NewMemoryStore(store.MemoryConfig{
 		DataSource: words,
 	})
 	if err != nil {
 		panic(err)
 	}
-	filterManage := filter.NewDirtyManager(memStore)
+	return filter.NewDirtyManager(memStore)
+}
+
+func wordsFilter(filterText string) string {
+
 	result, err := filterManage.Filter().Filter(filterText, '*', '@')
 	if err != nil {
 		panic(err)
