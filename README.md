@@ -1,15 +1,19 @@
 ##  孤独 Lonely
 
-![abc7178898c1ead114f64ec437cb41f81587469886.jpg](https://github.com/sunshinev/remote_pics/raw/master/abc7178898c1ead114f64ec437cb41f81587469886.jpg)
+![d2139b33a9868d1f17a471201d1272371588868902.jpg](https://cdn.jsdelivr.net/gh/sunshinev/remote_pics/d2139b33a9868d1f17a471201d1272371588868902.jpg)
 
 ## Demo
 
 http://chat.osinger.com/
 
+## 特色
+1. 支持性别修改、并且有颜色替换
+2. 支持敏感词过滤
+3. 支持姓名修改
 
 ## 介绍
 
-项目打造了一个模拟太空的环境，通过canvas 2d来模拟了3D的视觉效果。
+通过canvas 2d来模拟了3D的视觉效果。
 
 并且在该项目中使用了protobuf来进行前端和后端的通讯协议，这一点非常方便！
 
