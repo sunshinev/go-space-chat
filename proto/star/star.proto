@@ -16,10 +16,16 @@ message botStatusRequest {
         connecting = 1;
         close = 2;
     }
+
     status_type status = 9;
     string name = 10;
 
+    enum gender_type {
+        man = 0;
+        woman = 1;
+    }
 
+    gender_type gender = 11;
 }
 
 message botStatusResponse {

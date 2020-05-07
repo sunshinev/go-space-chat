@@ -13,6 +13,7 @@ var goog = jspb;
 var global = Function('return this')();
 
 goog.exportSymbol('proto.botStatusRequest', null, global);
+goog.exportSymbol('proto.botStatusRequest.gender_type', null, global);
 goog.exportSymbol('proto.botStatusRequest.status_type', null, global);
 goog.exportSymbol('proto.botStatusResponse', null, global);
 /**
@@ -98,7 +99,8 @@ proto.botStatusRequest.toObject = function(includeInstance, msg) {
     realX: jspb.Message.getFloatingPointFieldWithDefault(msg, 7, 0.0),
     realY: jspb.Message.getFloatingPointFieldWithDefault(msg, 8, 0.0),
     status: jspb.Message.getFieldWithDefault(msg, 9, 0),
-    name: jspb.Message.getFieldWithDefault(msg, 10, "")
+    name: jspb.Message.getFieldWithDefault(msg, 10, ""),
+    gender: jspb.Message.getFieldWithDefault(msg, 11, 0)
   };
 
   if (includeInstance) {
@@ -174,6 +176,10 @@ proto.botStatusRequest.deserializeBinaryFromReader = function(msg, reader) {
     case 10:
       var value = /** @type {string} */ (reader.readString());
       msg.setName(value);
+      break;
+    case 11:
+      var value = /** @type {!proto.botStatusRequest.gender_type} */ (reader.readEnum());
+      msg.setGender(value);
       break;
     default:
       reader.skipField();
@@ -274,6 +280,13 @@ proto.botStatusRequest.serializeBinaryToWriter = function(message, writer) {
       f
     );
   }
+  f = message.getGender();
+  if (f !== 0.0) {
+    writer.writeEnum(
+      11,
+      f
+    );
+  }
 };
 
 
@@ -284,6 +297,14 @@ proto.botStatusRequest.status_type = {
   WAITING: 0,
   CONNECTING: 1,
   CLOSE: 2
+};
+
+/**
+ * @enum {number}
+ */
+proto.botStatusRequest.gender_type = {
+  MAN: 0,
+  WOMAN: 1
 };
 
 /**
@@ -463,6 +484,24 @@ proto.botStatusRequest.prototype.getName = function() {
  */
 proto.botStatusRequest.prototype.setName = function(value) {
   return jspb.Message.setProto3StringField(this, 10, value);
+};
+
+
+/**
+ * optional gender_type gender = 11;
+ * @return {!proto.botStatusRequest.gender_type}
+ */
+proto.botStatusRequest.prototype.getGender = function() {
+  return /** @type {!proto.botStatusRequest.gender_type} */ (jspb.Message.getFieldWithDefault(this, 11, 0));
+};
+
+
+/**
+ * @param {!proto.botStatusRequest.gender_type} value
+ * @return {!proto.botStatusRequest} returns this
+ */
+proto.botStatusRequest.prototype.setGender = function(value) {
+  return jspb.Message.setProto3EnumField(this, 11, value);
 };
 
 

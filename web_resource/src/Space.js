@@ -6,7 +6,8 @@
  * license MIT
  * @type {null}
  */
-
+import "google-protobuf"
+import "./proto/star_pb.js"
 
 var ctx = null;
 var canvas = null;
@@ -102,7 +103,8 @@ var bot_status = {
     r_x: 0,
     r_y: 0,
     bot_id: '',
-    name:'',
+    name: '',
+    gender: 0
 };
 
 // 状态记忆
@@ -154,7 +156,7 @@ function initCtx() {
 function canvasHandle() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    ctx.fillStyle = "rgb(0,0,0)";
+    ctx.fillStyle = "rgb(20,7,34)";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     immediateUpdate();
@@ -314,7 +316,12 @@ function drawMatrix(x = canvas.width / 2, y = canvas.height / 2) {
     x = x + 5;
     y = y + 5;
     ctx.arc(x, y, 8, 0, 2 * Math.PI);
-    ctx.fillStyle = "rgb(255,255,255)";
+    if (bot_status.gender === proto.botStatusRequest.gender_type.WOMAN) {
+        ctx.fillStyle = "rgb(255,20,147)";
+    } else {
+        ctx.fillStyle = "rgb(0,191,255)";
+    }
+
     ctx.fill();
 
     // 瞳孔
@@ -326,18 +333,22 @@ function drawMatrix(x = canvas.width / 2, y = canvas.height / 2) {
     bot_status.e_y = pupil[1];
 
     ctx.arc(pupil[0], pupil[1], 4, 0, 2 * Math.PI);
-    ctx.fillStyle = "rgb(0,0,0)";
+    ctx.fillStyle = "rgb(255,255,255)";
     ctx.fill()
 
     ctx.font = "12px Arial";
-    ctx.fillStyle = "rgb(200,200,200)";
-    ctx.fillText(bot_status.name,x-8 ,y+20)
+    if (bot_status.gender === proto.botStatusRequest.gender_type.WOMAN) {
+        ctx.fillStyle = "rgb(255,20,147)";
+    } else {
+        ctx.fillStyle = "rgb(0,191,255)";
+    }
+    ctx.fillText(bot_status.name, x - 8, y + 20)
 
 }
 
 
 // 绘制矩形
-function drawMatrixGuest(x = canvas.width / 2, y = canvas.height / 2, e_x, e_y,name) {
+function drawMatrixGuest(x = canvas.width / 2, y = canvas.height / 2, e_x, e_y, name, gender) {
     // 矩形
     // ctx.fillStyle = "rgb(200,0,0)"
     // ctx.fillRect(x, y, 50, 30);
@@ -347,19 +358,29 @@ function drawMatrixGuest(x = canvas.width / 2, y = canvas.height / 2, e_x, e_y,n
     x = x + 5;
     y = y + 5;
     ctx.arc(x, y, 8, 0, 2 * Math.PI);
-    ctx.fillStyle = "rgb(255,255,255)";
+
+    if (gender === proto.botStatusRequest.gender_type.WOMAN) {
+        ctx.fillStyle = "rgb(255,20,147)";
+    } else {
+        ctx.fillStyle = "rgb(0,191,255)";
+    }
+
     ctx.fill();
 
     // 瞳孔
     ctx.beginPath()
 
     ctx.arc(e_x, e_y, 4, 0, 2 * Math.PI);
-    ctx.fillStyle = "rgb(0,0,0)";
+    ctx.fillStyle = "rgb(255,255,255)";
     ctx.fill()
 
     ctx.font = "12px Arial";
-    ctx.fillStyle = "rgb(200,200,200)";
-    ctx.fillText(name,x-8 ,y+20)
+    if (gender === proto.botStatusRequest.gender_type.WOMAN) {
+        ctx.fillStyle = "rgb(255,20,147)";
+    } else {
+        ctx.fillStyle = "rgb(0,191,255)";
+    }
+    ctx.fillText(name, x - 8, y + 20)
 
 }
 
@@ -503,7 +524,7 @@ function createInput() {
         "font-size:12px"
     );
 
-    input.setAttribute('maxlength',50);
+    input.setAttribute('maxlength', 50);
 
     document.body.appendChild(input)
     input.addEventListener('focus', () => {
@@ -554,13 +575,13 @@ function createMessageBubble(value) {
 
     setTimeout(() => {
         show_message_box.removeChild(bubble)
-    }, 1000 * 15);
+    }, 1000 * 8);
 }
 
 function createGuestBot() {
     for (var i in guest_bots) {
-        if (i !== bot_status.bot_id) {
-            drawMatrixGuest(guest_bots[i].r_x + guest_bots[i].x - real_top_left_poi.x, guest_bots[i].r_y + guest_bots[i].y - real_top_left_poi.y, guest_bots[i].r_x + guest_bots[i].e_x - real_top_left_poi.x, guest_bots[i].r_y + guest_bots[i].e_y - real_top_left_poi.y,guest_bots[i].name)
+        if (i !== bot_status.bot_id && isShowGuest(guest_bots[i].r_x + guest_bots[i].x - real_top_left_poi.x, guest_bots[i].r_y + guest_bots[i].y - real_top_left_poi.y)) {
+            drawMatrixGuest(guest_bots[i].r_x + guest_bots[i].x - real_top_left_poi.x, guest_bots[i].r_y + guest_bots[i].y - real_top_left_poi.y, guest_bots[i].r_x + guest_bots[i].e_x - real_top_left_poi.x, guest_bots[i].r_y + guest_bots[i].e_y - real_top_left_poi.y, guest_bots[i].name, guest_bots[i].gender)
             // console.info(guest_bots[i].show_message_box)
             showGuestMessage(i)
             // console.info(guest_bots[i].show_message_box)
@@ -569,10 +590,35 @@ function createGuestBot() {
                 guest_bots[i].msg = '';
             }
             moveBubbleGuest(i)
-
         }
     }
 }
+
+/**
+ * 如果guest不在视野范围之内，那么不进行绘制，节省绘制资源
+ * @param guestX
+ * @param guestY
+ */
+function isShowGuest(guestX, guestY) {
+    if (guestX < 0) {
+        return false;
+    }
+
+    if (guestY < 0) {
+        return false;
+    }
+
+    if (guestX > canvas.width) {
+        return false;
+    }
+
+    if (guestY > canvas.height) {
+        return false;
+    }
+
+    return true;
+}
+
 
 function showGuestMessage(name) {
     // 创建div
@@ -720,11 +766,8 @@ function computeDistance(x, y, x1, y1) {
     return Math.sqrt(Math.pow(x - x1, 2) + Math.pow(y - y1, 2))
 }
 
-import "google-protobuf"
-import "./proto/star_pb.js"
-
 function createWebSocket() {
-    ws = new WebSocket("ws://"+location.hostname+":9000/ws")
+    ws = new WebSocket("ws://" + location.hostname + ":9000/ws")
 
     ws.binaryType = 'arraybuffer';
 
@@ -752,7 +795,8 @@ function createWebSocket() {
                 r_x: bot_list[i].getRealX(),
                 r_y: bot_list[i].getRealY(),
                 msg: bot_list[i].getMsg(),
-                name:bot_list[i].getName()
+                name: bot_list[i].getName(),
+                gender:bot_list[i].getGender(),
                 // show_message_box: !!guest_bots[i].show_message_box ? guest_bots[i].show_message_box:undefined
             };
         }
@@ -792,12 +836,13 @@ function sendStatusByWs(msg = '') {
         chat.setY(visual.y);
         chat.setEyeX(bot_status.e_x);
         chat.setEyeY(bot_status.e_y);
-        chat.setRealX(real_top_left_poi.x)
-        chat.setRealY(real_top_left_poi.y)
+        chat.setRealX(real_top_left_poi.x);
+        chat.setRealY(real_top_left_poi.y);
         chat.setMsg(msg);
         chat.setName(bot_status.name);
+        chat.setGender(bot_status.gender);
 
-        ws.send(chat.serializeBinary())
+        ws.send(chat.serializeBinary());
 
         Object.assign(bot_status_old, bot_status)
     }
@@ -808,8 +853,15 @@ function initLocalStorage() {
     var name = localStorage.getItem('star_name');
     if (name !== null && name !== "") {
         bot_status.name = name;
-    }else{
-        bot_status.name = 'guest'+Math.random().toString(36)
+    } else {
+        bot_status.name = 'guest' + Math.random().toString(36)
+    }
+
+    var gender = localStorage.getItem('star_gender');
+    if (gender !== null) {
+        bot_status.gender = parseInt(gender);
+    } else {
+        bot_status.gender = proto.botStatusRequest.gender_type.MAN
     }
 }
 
@@ -827,13 +879,13 @@ function initTools() {
         "border-radius:5px;");
     document.body.appendChild(tool_box);
 
-    let name = createBtn(tool_box,'image/human.png','点我修改昵称');
+    let name = createBtn(tool_box, 'image/human.png', '点我修改昵称');
 
     var input = null;
 
-    name.addEventListener('click',(evt)=>{
+    name.addEventListener('click', (evt) => {
 
-        if(input) {
+        if (input) {
             return false;
         }
 
@@ -851,23 +903,37 @@ function initTools() {
             "font-size:12px"
         );
 
-        input.setAttribute('placeholder','请输入昵称，长度10')
-        input.setAttribute('maxlength',10);
+        input.setAttribute('placeholder', '请输入昵称，长度10')
+        input.setAttribute('maxlength', 10);
 
         document.body.appendChild(input)
         input.focus();
 
-        input.addEventListener('blur',()=>{
+        input.addEventListener('blur', () => {
             // 设置名称
             if (input.value !== "") {
                 bot_status.name = input.value;
-                localStorage.setItem('star_name',bot_status.name);
+                localStorage.setItem('star_name', bot_status.name);
             }
             // 移除节点
             document.body.removeChild(input)
             input = null;
         })
     })
+
+    let genderMan = createBtn(tool_box, 'image/m.png', '男生');
+
+    genderMan.addEventListener('click', (evt) => {
+        bot_status.gender = proto.botStatusRequest.gender_type.MAN
+        localStorage.setItem('star_gender', bot_status.gender);
+    });
+
+    let genderWoman = createBtn(tool_box, 'image/w.png', '女生');
+    genderWoman.addEventListener('click', (evt) => {
+        bot_status.gender = proto.botStatusRequest.gender_type.WOMAN
+        localStorage.setItem('star_gender', bot_status.gender);
+    });
+
 
 }
 
@@ -883,8 +949,8 @@ function createBtn(tool_box, src, title = '') {
         "cursor:default;" +
         "border-radius:5px;");
 
-    button.setAttribute('src',src);
-    button.setAttribute('title',title);
+    button.setAttribute('src', src);
+    button.setAttribute('title', title);
 
     tool_box.appendChild(button);
 
@@ -912,7 +978,7 @@ function createReadme() {
         "<p>1. W A S D进行上下左右</p>" +
         "<p>2. 空格开启聊天框，回车发送消息</p>" +
         "<p>3. 左上角修改昵称，点击空白修改成功</p>" +
-        "<p>作者GIT：<a href='https://github.com/sunshinev/go-space-chat' style='color:rgba(200,200,200,0.8)'>https://github.com/sunshinev/go-space-chat</a></p>"+
+        "<p>作者GIT：<a href='https://github.com/sunshinev/go-space-chat' style='color:rgba(200,200,200,0.8)'>https://github.com/sunshinev/go-space-chat</a></p>" +
         "<p>前端 Vue+canvas+websocket+protobuf</p>" +
         "<p>后端 Golang+websocket+protobuf+goroutine</p>";
 
@@ -922,6 +988,7 @@ function createReadme() {
 
 function createDirectionSign() {
     // 根据两点
+
 }
 
 export default function () {
