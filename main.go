@@ -6,6 +6,7 @@ import (
 	pb "go-space-chat/proto/star"
 	"io"
 	"log"
+	"math"
 	"net/http"
 	_ "net/http/pprof"
 	"os"
@@ -145,7 +146,19 @@ func boardcast() {
 			defer clients_mutex.RUnlock()
 			for cli := range clients {
 				// protobuf协议
+
+				// 不给自己发消息
 				if clients[cli].BotId == msg.BotId {
+					continue
+				}
+
+				// 距离太远的用户就没必要发送消息了
+				if math.Abs(float64(clients[cli].RealX-msg.RealX+clients[cli].X+msg.X)) > 2000 {
+					continue
+				}
+
+				// 距离太远的用户就没必要发送消息了
+				if math.Abs(float64(clients[cli].RealY-msg.RealY+clients[cli].Y+msg.Y)) > 2000 {
 					continue
 				}
 
