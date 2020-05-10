@@ -6,7 +6,6 @@ import (
 	pb "go-space-chat/proto/star"
 	"io"
 	"log"
-	"math"
 	"net/http"
 	_ "net/http/pprof"
 	"os"
@@ -152,15 +151,17 @@ func boardcast() {
 					continue
 				}
 
-				// 距离太远的用户就没必要发送消息了
-				if math.Abs(float64(clients[cli].RealX-msg.RealX+clients[cli].X+msg.X)) > 2000 {
-					continue
-				}
-
-				// 距离太远的用户就没必要发送消息了
-				if math.Abs(float64(clients[cli].RealY-msg.RealY+clients[cli].Y+msg.Y)) > 2000 {
-					continue
-				}
+				//log.Print(msg)
+				//log.Print(clients[cli])
+				//// 距离太远的用户就没必要发送消息了
+				//if math.Abs(float64(clients[cli].RealX-msg.RealX+clients[cli].X-msg.X)) > 200 {
+				//	continue
+				//}
+				//
+				//// 距离太远的用户就没必要发送消息了
+				//if math.Abs(float64(clients[cli].RealY-msg.RealY+clients[cli].Y-msg.Y)) > 200 {
+				//	continue
+				//}
 
 				pbrp := &pb.BotStatusResponse{BotStatus: []*pb.BotStatusRequest{msg}}
 				b, err := proto.Marshal(pbrp)
