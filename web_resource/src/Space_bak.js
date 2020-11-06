@@ -121,9 +121,6 @@ var real_top_left_poi = {
 var guest_bots = {};
 var guest_show_message_box = {};
 
-// 全局聊天窗口
-var globalChatWindow = document.createElement("div");
-
 
 function initCtx() {
     canvas = document.getElementById("test");
@@ -802,8 +799,6 @@ function createWebSocket() {
                 gender:bot_list[i].getGender(),
                 // show_message_box: !!guest_bots[i].show_message_box ? guest_bots[i].show_message_box:undefined
             };
-
-            addMessageToChatWindow(bot_list[i].getName(),bot_list[i].getMsg())
         }
     };
 
@@ -850,8 +845,6 @@ function sendStatusByWs(msg = '') {
         ws.send(chat.serializeBinary());
 
         Object.assign(bot_status_old, bot_status)
-
-        addMessageToChatWindow(bot_status.name,msg)
     }
 }
 
@@ -992,51 +985,17 @@ function createReadme() {
 }
 
 
-function createGlobalChatWindow() {
-    globalChatWindow.setAttribute("style", "" +
-        "position:fixed;" +
-        "right:5px;" +
-        "bottom:0px;" +
-        "width:200px;" +
-        "height:70%;" +
-        "color:rgba(200,200,200,0.8);" +
-        "border:1px solid rgba(200,200,200,0.8);"+
-        "cursor:default;" +
-        "overflow-y:auto;"+
-        "border-radius:5px;");
+function createDirectionSign() {
+    // 根据两点
 
-    document.body.appendChild(globalChatWindow)
 }
-
-function addMessageToChatWindow(name,message) {
-    if (!message){
-        return
-    }
-    var mDiv = document.createElement("div")
-    mDiv.setAttribute("style","" +
-        "margin:2px;" +
-        "");
-    mDiv.innerHTML = ""+
-        "<div>" +
-        "<span style='color: darkgreen'>"+name+"：</span>" +message
-    "</div>"
-    "";
-
-    globalChatWindow.appendChild(mDiv)
-
-    globalChatWindow.scrollTop = globalChatWindow.scrollHeight
-}
-
 
 export default function () {
-    createReadme();
-    createGlobalChatWindow();
-
     initCtx();
     bindEvent();
     initTools();
     initLocalStorage();
     createWebSocket();
-
+    createReadme();
     window.requestAnimationFrame(canvasHandle);
 };
