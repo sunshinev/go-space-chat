@@ -997,7 +997,7 @@ function createGlobalChatWindow() {
         "position:fixed;" +
         "right:5px;" +
         "bottom:0px;" +
-        "width:200px;" +
+        "width:400px;" +
         "height:70%;" +
         "color:rgba(200,200,200,0.8);" +
         "border:1px solid rgba(200,200,200,0.8);"+
@@ -1009,7 +1009,7 @@ function createGlobalChatWindow() {
 }
 
 function addMessageToChatWindow(name,message) {
-    if (!message){
+    if (!str.trim(message)){
         return
     }
     var mDiv = document.createElement("div")
