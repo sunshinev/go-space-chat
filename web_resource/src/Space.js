@@ -562,7 +562,7 @@ function sendMessage() {
     //     );
     //     document.body.appendChild(show_message_box)
     // }
-
+    //
     // createMessageBubble(value)
 
     // 发送文字消息
@@ -584,9 +584,18 @@ function createMessageBubble(value) {
 function createGuestBot() {
     for (var i in guest_bots) {
         if (i === bot_status.bot_id) {
-            showGuestMessage(i)
+            if (show_message_box == null) {
+                show_message_box = document.createElement("div");
+                show_message_box.setAttribute("style", "position:fixed;" +
+                    "left:" + (visual.x) + "px;" +
+                    "bottom:" + (canvas.height - visual.y + 20) + "px;" +
+                    "color:white;" +
+                    "font-size:12px"
+                );
+                document.body.appendChild(show_message_box)
+            }
             if (guest_bots[i].msg) {
-                createMessageBubbleGuest(i, guest_bots[i].msg)
+                createMessageBubble(guest_bots[i].msg)
                 guest_bots[i].msg = '';
             }
         }else if (i !== bot_status.bot_id && isShowGuest(guest_bots[i].r_x + guest_bots[i].x - real_top_left_poi.x, guest_bots[i].r_y + guest_bots[i].y - real_top_left_poi.y)) {
