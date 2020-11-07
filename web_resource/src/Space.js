@@ -839,10 +839,8 @@ function sendStatusByWs(msg = '') {
     if (msg === "") {
         if (rateKey) {
             rateKey = false
-            console.info("do1")
             setTimeout(function(){rateKey = true},30)
         }else {
-            console.info("do3")
             return
         }
     }
