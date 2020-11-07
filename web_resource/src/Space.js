@@ -1009,7 +1009,7 @@ function createGlobalChatWindow() {
 }
 
 function addMessageToChatWindow(name,message) {
-    if (str.trim(message) === ""){
+    if (message.trim() === ""){
         return
     }
     var mDiv = document.createElement("div")
