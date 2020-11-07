@@ -4,6 +4,7 @@ import (
 	"flag"
 	"go-space-chat/component"
 	pb "go-space-chat/proto/star"
+	"html"
 	"log"
 	"net/http"
 	"sync"
@@ -133,6 +134,9 @@ func (c *Core) listenWebsocket(conn *websocket.Conn) {
 		// 敏感词过滤
 		pbr.Msg = c.TextSafer.Filter(pbr.Msg)
 		pbr.Name = c.TextSafer.Filter(pbr.Name)
+		// 过滤html 标签
+		pbr.Msg = html.EscapeString(pbr.Msg)
+		pbr.Name = html.EscapeString(pbr.Name)
 
 		// 初始化链接的ID
 		if clientInfo.BotId == "" {
@@ -159,14 +163,14 @@ func (c *Core) broadcast() {
 			// 遍历所有客户
 			c.Clients.Range(func(connKey, bs interface{}) bool {
 
-				bot, ok := bs.(*pb.BotStatusRequest)
-				if !ok {
-					return true
-				}
+				//bot, ok := bs.(*pb.BotStatusRequest)
+				//if !ok {
+				//	return true
+				//}
 				// 不给自己发消息
-				if bot.BotId == m.BotId {
-					return true
-				}
+				//if bot.BotId == m.BotId {
+				//	return true
+				//}
 
 				resp := &pb.BotStatusResponse{
 					BotStatus: []*pb.BotStatusRequest{&m},

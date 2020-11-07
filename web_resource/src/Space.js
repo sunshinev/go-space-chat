@@ -563,7 +563,7 @@ function sendMessage() {
         document.body.appendChild(show_message_box)
     }
 
-    createMessageBubble(value)
+    // createMessageBubble(value)
 
     // 发送文字消息
     sendStatusByWs(value);
@@ -583,7 +583,9 @@ function createMessageBubble(value) {
 
 function createGuestBot() {
     for (var i in guest_bots) {
-        if (i !== bot_status.bot_id && isShowGuest(guest_bots[i].r_x + guest_bots[i].x - real_top_left_poi.x, guest_bots[i].r_y + guest_bots[i].y - real_top_left_poi.y)) {
+        if (i === bot_status.bot_id) {
+            showGuestMessage(i)
+        }else if (i !== bot_status.bot_id && isShowGuest(guest_bots[i].r_x + guest_bots[i].x - real_top_left_poi.x, guest_bots[i].r_y + guest_bots[i].y - real_top_left_poi.y)) {
             drawMatrixGuest(guest_bots[i].r_x + guest_bots[i].x - real_top_left_poi.x, guest_bots[i].r_y + guest_bots[i].y - real_top_left_poi.y, guest_bots[i].r_x + guest_bots[i].e_x - real_top_left_poi.x, guest_bots[i].r_y + guest_bots[i].e_y - real_top_left_poi.y, guest_bots[i].name, guest_bots[i].gender)
             // console.info(guest_bots[i].show_message_box)
             showGuestMessage(i)
@@ -799,7 +801,7 @@ function createWebSocket() {
                 r_y: bot_list[i].getRealY(),
                 msg: bot_list[i].getMsg(),
                 name: bot_list[i].getName(),
-                gender:bot_list[i].getGender(),
+                gender: bot_list[i].getGender(),
                 // show_message_box: !!guest_bots[i].show_message_box ? guest_bots[i].show_message_box:undefined
             };
 
@@ -812,6 +814,8 @@ function createWebSocket() {
     }
 }
 
+// 状态同步的频率限制
+var rateKey = true
 
 function sendStatusByWs(msg = '') {
 
@@ -830,6 +834,20 @@ function sendStatusByWs(msg = '') {
     } else {
         is_open = true;
     }
+
+    // 如果msg==“”那么同步动作的时候，限制50ms一次
+    if (msg === "") {
+        if (rateKey) {
+            rateKey = false
+            console.info("do1")
+            setTimeout(function(){rateKey = true},30)
+        }else {
+            console.info("do3")
+            return
+        }
+    }
+
+    console.info("do2")
 
     if (is_open || msg) {
 
@@ -851,7 +869,7 @@ function sendStatusByWs(msg = '') {
 
         Object.assign(bot_status_old, bot_status)
 
-        addMessageToChatWindow(bot_status.name,msg)
+        // addMessageToChatWindow(bot_status.name,msg)
     }
 }
 
@@ -1027,10 +1045,19 @@ function addMessageToChatWindow(name,message) {
     globalChatWindow.scrollTop = globalChatWindow.scrollHeight
 }
 
+function welcome() {
+    var str = ["欢迎来到游戏","希望在这里能体验到不一样的感觉","QQ群：690393633","请文明沟通~"]
+    for (var id in str) {
+        addMessageToChatWindow("系统管理员",str[id])
+    }
+}
+
 
 export default function () {
     createReadme();
     createGlobalChatWindow();
+
+    welcome();
 
     initCtx();
     bindEvent();
