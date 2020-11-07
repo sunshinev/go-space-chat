@@ -150,10 +150,10 @@ func (c *Core) listenWebsocket(conn *websocket.Conn) {
 func (c *Core) broadcast() {
 	// 始终读取messages
 	for msg := range messages {
-		if msg.Msg == "" {
-			continue
+		if msg.Msg != "" {
+			log.Printf("%s : %s", msg.BotId+":"+msg.Name, msg.Msg)
 		}
-		log.Printf("%s : %s", msg.BotId+":"+msg.Name, msg.Msg)
+
 		// 读取到之后进行广播，启动协程，是为了立即处理下一条msg
 		go func(m pb.BotStatusRequest) {
 			// 遍历所有客户
