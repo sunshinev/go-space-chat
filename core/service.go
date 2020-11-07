@@ -116,6 +116,11 @@ func (c *Core) listenWebsocket(conn *websocket.Conn) {
 				BotId:  clientInfo.BotId,
 				Status: pb.BotStatusRequest_close,
 			}
+			messages <- &pb.BotStatusRequest{
+				BotId: clientInfo.BotId,
+				Name:  "系统管理员",
+				Msg:   "用户@" + clientInfo.Name + " 下线了",
+			}
 			// 清除连接
 			c.Clients.Delete(conn)
 			err = conn.Close()
@@ -142,8 +147,12 @@ func (c *Core) listenWebsocket(conn *websocket.Conn) {
 		if clientInfo.BotId == "" {
 			c.Clients.Store(conn, &pb.BotStatusRequest{
 				BotId:  pbr.GetBotId(),
+				Name:   pbr.GetName(),
 				Status: pb.BotStatusRequest_connecting,
 			})
+			// 对新用户进行上线提示
+			pbr.Msg = "用户@" + pbr.Name + "  上线啦"
+			pbr.Name = "系统管理员"
 		}
 		// 广播队列
 		messages <- pbr

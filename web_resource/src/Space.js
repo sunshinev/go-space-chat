@@ -845,8 +845,6 @@ function sendStatusByWs(msg = '') {
         }
     }
 
-    console.info("do2")
-
     if (is_open || msg) {
 
         let chat = new proto.botStatusRequest();
