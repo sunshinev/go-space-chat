@@ -35,7 +35,7 @@ func (c *Client) readAndServe() {
 		c.close()
 	}()
 	for {
-		c.conn.SetReadDeadline(time.Second * 60)
+		c.conn.SetReadDeadline(time.Now().Add(time.Second * 60))
 		_, message, err := c.conn.ReadMessage()
 		if err != nil {
 			log.Printf("read message error,client: %v break, ip: %v, err:%v", c.botId, c.conn.LocalAddr(), err)
