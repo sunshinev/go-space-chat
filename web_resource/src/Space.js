@@ -346,9 +346,13 @@ function drawMatrix(x = canvas.width / 2, y = canvas.height / 2) {
         ctx.fillStyle = "rgb(0,191,255)";
     }
     ctx.fillText(bot_status.name, x - 8, y + 20)
+    ctx.fillText(x + ", " + y, x - 8, y - 15) // 自己的坐标
 
 }
 
+function drawMatrix2(item) {
+
+}
 
 // 绘制矩形
 function drawMatrixGuest(x = canvas.width / 2, y = canvas.height / 2, e_x, e_y, name, gender) {
