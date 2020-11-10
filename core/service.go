@@ -34,12 +34,12 @@ var messages = make(chan *pb.BotStatusRequest, 1000)
 
 func (c *Core) Run() {
 	// 启动参数
-	c.SocketAddr = flag.String("socket_addr", ":9000", "socket address")
-	c.WebAddr = flag.String("web_addr", ":80", "http service address")
+	// c.SocketAddr = flag.String("socket_addr", ":9000", "socket address")
+	c.WebAddr = flag.String("web_addr", ":9000", "http service address")
 
 	flag.Parse()
 
-	log.Printf("socket port %s", *c.SocketAddr)
+	// log.Printf("socket port %s", *c.SocketAddr)
 	log.Printf("web port %s", *c.WebAddr)
 
 	// 敏感词初始化
@@ -50,7 +50,12 @@ func (c *Core) Run() {
 
 	// 启动web服务
 	go func() {
-		err := http.ListenAndServe(*c.WebAddr, http.FileServer(http.Dir("web_resource/dist/")))
+		fileHandler := http.FileServer(http.Dir("web_resource/dist/"))
+		mux := http.NewServeMux()
+		mux.HandleFunc("/ws", c.websocketUpgrade)
+		mux.Handle("/", fileHandler)
+		http.HandleFunc("/ws", c.websocketUpgrade)
+		err := http.ListenAndServe(*c.WebAddr, mux)
 		if err != nil {
 			log.Fatalf("web 服务启动失败  %v", err)
 		} else {
@@ -68,12 +73,13 @@ func (c *Core) Run() {
 	}()
 
 	// 监听websocket
-	http.HandleFunc("/ws", c.websocketUpgrade)
+	// http.HandleFunc("/ws", c.websocketUpgrade)
 
-	err = http.ListenAndServe(*c.SocketAddr, nil)
-	if err != nil {
-		log.Fatalf("create error %v", err)
-	}
+	// err = http.ListenAndServe(*c.SocketAddr, nil)
+	// if err != nil {
+	// log.Fatalf("create error %v", err)
+	// }
+	select {}
 }
 
 func (c *Core) cronTask() {
