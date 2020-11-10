@@ -9,6 +9,8 @@
 import "google-protobuf"
 import "./proto/star_pb.js"
 
+const wsAddr = "ws://" + location.host + "/ws"
+
 var ctx = null;
 var canvas = null;
 
@@ -789,7 +791,7 @@ function computeDistance(x, y, x1, y1) {
 }
 
 function createWebSocket() {
-    ws = new WebSocket("ws://" + location.hostname + ":9000/ws")
+    ws = new WebSocket(wsAddr)
 
     ws.binaryType = 'arraybuffer';
 
