@@ -10,7 +10,9 @@
   "dependencies": {
     "axios": "^0.19.2",
     "browserify": "^16.5.1",
+    "chart.js": "^2.9.4",
     "core-js": "^3.6.4",
+    "fpsmeter": "^0.3.1",
     "google-protobuf": "^3.11.4",
     "int32": "^2.5.5",
     "view-design": "^4.1.3",

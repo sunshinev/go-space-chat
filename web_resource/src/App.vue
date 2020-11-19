@@ -1,15 +1,18 @@
 <template>
   <div id="app">
     <Donghua/>
+    <LoginChart/>
   </div>
 </template>
 
 <script>
   import Donghua from './components/Donghua.vue'
+  import LoginChart from './components/Chart.vue'
   export default {
     name: 'App',
     components: {
-      Donghua
+      Donghua,
+      LoginChart,
     }
   }
 </script>

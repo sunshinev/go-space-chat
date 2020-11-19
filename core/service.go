@@ -1,6 +1,7 @@
 package core
 
 import (
+	"encoding/json"
 	"flag"
 	"go-space-chat/component"
 	pb "go-space-chat/proto/star"
@@ -20,6 +21,7 @@ type Core struct {
 	ConnMutex         sync.RWMutex
 	Clients           sync.Map // 客户端集合
 	TextSafer         component.TextSafe
+	loginChart        *component.LoginChart
 }
 
 // 广播消息缓冲通道
@@ -41,9 +43,21 @@ func (c *Core) Run() {
 		log.Fatalf("text safe new err %v", err)
 	}
 
+	// 初始日志记录
+	c.loginChart = component.InitLoginChart()
+
+	// 启动api服务
+	SafeGo(func() {
+
+		//_ = http.ListenAndServe(":8081", nil)
+	})
+
 	// 启动web服务
 	go func() {
-		err := http.ListenAndServe(*c.WebAddr, http.FileServer(http.Dir("web_resource/dist/")))
+		http.HandleFunc("/login_charts", c.ChartDataApi)
+		http.Handle("/", http.FileServer(http.Dir("web_resource/dist/")))
+
+		err := http.ListenAndServe(*c.WebAddr, nil)
 		if err != nil {
 			log.Fatalf("web 服务启动失败  %v", err)
 		} else {
@@ -52,11 +66,13 @@ func (c *Core) Run() {
 	}()
 
 	// 广播
-	go c.broadcast()
+	SafeGo(func() {
+		c.broadcast()
+	})
 	// pprof 性能
-	go func() {
+	SafeGo(func() {
 		log.Println(http.ListenAndServe("localhost:6060", nil))
-	}()
+	})
 
 	// 监听websocket
 	http.HandleFunc("/ws", c.websocketUpgrade)
@@ -153,6 +169,9 @@ func (c *Core) listenWebsocket(conn *websocket.Conn) {
 			// 对新用户进行上线提示
 			pbr.Msg = "用户@" + pbr.Name + "  上线啦"
 			pbr.Name = "系统管理员"
+			// 新用户上线，记录次数
+			c.loginChart.Entry()
+
 		}
 		// 广播队列
 		messages <- pbr
@@ -206,5 +225,39 @@ func (c *Core) broadcast() {
 				return true
 			})
 		}(*msg)
+	}
+}
+
+type ChartApiRsp struct {
+	X []string `json:"x"`
+	Y []int32  `json:"y"`
+}
+
+func (c *Core) ChartDataApi(w http.ResponseWriter, r *http.Request) {
+	chartData := c.loginChart.FetchAllData()
+
+	xSlice := []string{}
+	ySlice := []int32{}
+
+	for _, v := range chartData {
+		xSlice = append(xSlice, v.X)
+		ySlice = append(ySlice, v.Y)
+	}
+
+	data := &ChartApiRsp{
+		X: xSlice,
+		Y: ySlice,
+	}
+
+	d, err := json.Marshal(data)
+	if err != nil {
+		log.Printf("ChartDataApi marsharl %v", err)
+		return
+	}
+
+	w.Header().Set("content-type", "application/json")
+	_, err = w.Write(d)
+	if err != nil {
+		log.Printf("ChartDataApi write %v", err)
 	}
 }

@@ -1,6 +1,5 @@
 <template>
     <canvas id="test">
-
     </canvas>
 </template>
 <script>

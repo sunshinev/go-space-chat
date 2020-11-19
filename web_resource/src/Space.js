@@ -8,6 +8,7 @@
  */
 import "google-protobuf"
 import "./proto/star_pb.js"
+import "fpsmeter"
 
 var ctx = null;
 var canvas = null;
@@ -124,6 +125,10 @@ var guest_show_message_box = {};
 // 全局聊天窗口
 var globalChatWindow = document.createElement("div");
 
+// fps
+FPSMeter.theme.dark.count.fontSize = '12px'
+var meter = new FPSMeter();
+
 
 function initCtx() {
     canvas = document.getElementById("test");
@@ -177,6 +182,9 @@ function canvasHandle() {
     sendStatusByWs();
 
     createGuestBot();
+
+    // fps
+    meter.tick()
 
     window.requestAnimationFrame(canvasHandle);
 }
@@ -339,7 +347,7 @@ function drawMatrix(x = canvas.width / 2, y = canvas.height / 2) {
     ctx.fillStyle = "rgb(255,255,255)";
     ctx.fill()
 
-    ctx.font = "12px Arial";
+    ctx.font = "14px Arial";
     if (bot_status.gender === proto.botStatusRequest.gender_type.WOMAN) {
         ctx.fillStyle = "rgb(255,20,147)";
     } else {
@@ -377,7 +385,7 @@ function drawMatrixGuest(x = canvas.width / 2, y = canvas.height / 2, e_x, e_y, 
     ctx.fillStyle = "rgb(255,255,255)";
     ctx.fill()
 
-    ctx.font = "12px Arial";
+    ctx.font = "14px Arial";
     if (gender === proto.botStatusRequest.gender_type.WOMAN) {
         ctx.fillStyle = "rgb(255,20,147)";
     } else {
@@ -1055,7 +1063,7 @@ function addMessageToChatWindow(name,message) {
 }
 
 function welcome() {
-    var str = ["欢迎来到游戏","希望在这里能体验到不一样的感觉","QQ群：690393633","请文明沟通~"]
+    var str = ["欢迎来到这个秘密的地方","茫茫人海，如果能在这里相遇，说明是一种缘分~"]
     for (var id in str) {
         addMessageToChatWindow("系统管理员",str[id])
     }
@@ -1073,6 +1081,7 @@ export default function () {
     initTools();
     initLocalStorage();
     createWebSocket();
+
 
     window.requestAnimationFrame(canvasHandle);
 };
