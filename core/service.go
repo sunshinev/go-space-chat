@@ -53,7 +53,7 @@ func (c *Core) Run() {
 	})
 
 	// 启动web服务
-	go func() {
+	SafeGo(func() {
 		http.HandleFunc("/login_charts", c.ChartDataApi)
 		http.Handle("/", http.FileServer(http.Dir("web_resource/dist/")))
 
@@ -63,7 +63,7 @@ func (c *Core) Run() {
 		} else {
 			log.Printf("web 服务启动成功 端口 %s", *c.WebAddr)
 		}
-	}()
+	})
 
 	// 广播
 	SafeGo(func() {
@@ -95,7 +95,9 @@ func (c *Core) websocketUpgrade(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Printf("http upgrade webcoket err %v", err)
 	} else {
-		go c.listenWebsocket(conn)
+		SafeGo(func() {
+			c.listenWebsocket(conn)
+		})
 	}
 }
 
