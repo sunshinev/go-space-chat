@@ -999,39 +999,11 @@ function createBtn(tool_box, src, title = '') {
     return button;
 }
 
-function createReadme() {
-    var readme = document.createElement("div")
-    readme.setAttribute("style", "" +
-        "position:fixed;" +
-        "left:5px;" +
-        "bottom:0px;" +
-        "width:500px;" +
-        "height:50;" +
-        // "background-color:rgba(200,200,0,0.5);" +
-        // "border:1px solid rgba(200,200,0,0.5);" +
-        "color:rgba(200,200,200,0.8);" +
-        "cursor:default;" +
-        "border-radius:5px;");
-    readme.innerHTML = "" +
-        "<p>欢迎进入游戏</p>" +
-        "<p>概念来自EVE游戏，以及蝌蚪聊天室，不过该游戏代码都是全新实现的</p>" +
-        "<p>操作方式：</p>" +
-        "<p>1. W A S D进行上下左右</p>" +
-        "<p>2. 空格开启聊天框，回车发送消息</p>" +
-        "<p>3. 左上角修改昵称，点击空白修改成功</p>" +
-        "<p>作者GIT：<a href='https://github.com/sunshinev/go-space-chat' style='color:rgba(200,200,200,0.8)'>https://github.com/sunshinev/go-space-chat</a></p>" +
-        "<p>前端 Vue+canvas+websocket+protobuf</p>" +
-        "<p>后端 Golang+websocket+protobuf+goroutine</p>";
-
-    document.body.appendChild(readme)
-}
-
-
 function createGlobalChatWindow() {
     globalChatWindow.setAttribute("style", "" +
         "position:fixed;" +
         "right:5px;" +
-        "bottom:0px;" +
+        "bottom:200px;" +
         "width:400px;" +
         "height:70%;" +
         "color:rgba(200,200,200,0.8);" +
@@ -1063,7 +1035,16 @@ function addMessageToChatWindow(name,message) {
 }
 
 function welcome() {
-    var str = ["欢迎来到这个秘密的地方","茫茫人海，如果能在这里相遇，说明是一种缘分~"]
+    var str = [
+        "欢迎来到这个秘密的地方，茫茫人海，如果能在这里相遇，说明是一种缘分~",
+        "互动方式如下：",
+        "1. W A S D进行上下左右",
+        "2. 空格开启聊天框，回车发送消息",
+        "3. 左上角修改昵称、性别，点击空白修改成功",
+        "4. 新增用户上线频率全天分布图",
+        "git 地址：<a href='https://github.com/sunshinev/go-space-chat' target='_blank'>https://github.com/sunshinev/go-space-chat</a>",
+        "前端 Vue+canvas+websocket+protobuf，后端 Golang+websocket+protobuf+goroutine",
+    ]
     for (var id in str) {
         addMessageToChatWindow("系统管理员",str[id])
     }
@@ -1071,7 +1052,6 @@ function welcome() {
 
 
 export default function () {
-    createReadme();
     createGlobalChatWindow();
 
     welcome();
