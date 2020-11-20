@@ -19,7 +19,6 @@ export default {
     getChartData: function() {
       var that = this
       axios.get('/login_charts').then(function(response) {
-        console.info(response)
         that.xlist = response.data.x
         that.ylist = response.data.y
 
@@ -28,9 +27,6 @@ export default {
     },
     renderCharts: function() {
       var ctx = document.getElementById("myChart");
-
-      // ctx.setAttribute("style","height:200px;width:100%;position:absolute;bottom:0")
-      console.info(this.xlist, this.ylist)
 
       var options = {
         maintainAspectRatio: false,

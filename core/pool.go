@@ -2,7 +2,6 @@ package core
 
 import (
 	"context"
-	"log"
 	"sync"
 	"time"
 )
@@ -13,7 +12,7 @@ type Task func()
 type GoPool struct {
 	MaxWorkerIdleTime time.Duration // worker 最大空闲时间
 	MaxWorkerNum      int32         // 协程最大数量
-	TaskEntryChan     chan *Task    // 任务入列
+	TaskEntryChan     chan Task     // 任务入列
 	Workers           []*worker     // 已创建worker
 	FreeWorkerChan    chan *worker  // 空闲worker
 	Lock              sync.Mutex
@@ -27,9 +26,9 @@ const (
 // 干活的人
 type worker struct {
 	Pool         *GoPool
-	StartTime    time.Time  // 开始时间
-	TaskChan     chan *Task // 执行队列
-	LastWorkTime time.Time  // 最后执行时间
+	StartTime    time.Time // 开始时间
+	TaskChan     chan Task // 执行队列
+	LastWorkTime time.Time // 最后执行时间
 	Ctx          context.Context
 	Cancel       context.CancelFunc
 	Status       int32 // 被过期删掉的标记
@@ -43,8 +42,8 @@ var defaultPool = func() *GoPool {
 func NewPool() *GoPool {
 	g := &GoPool{
 		MaxWorkerIdleTime: 10 * time.Second,
-		MaxWorkerNum:      20,
-		TaskEntryChan:     make(chan *Task, 2000),
+		MaxWorkerNum:      1000,
+		TaskEntryChan:     make(chan Task, 2000),
 		FreeWorkerChan:    make(chan *worker, 2000),
 	}
 
@@ -63,13 +62,13 @@ func (g *GoPool) fireWorker() {
 		select {
 		// 10秒执行一次
 		case <-time.After(10 * time.Second):
-			for k, w := range g.Workers {
+			for _, w := range g.Workers {
 				if time.Now().Sub(w.LastWorkTime) > g.MaxWorkerIdleTime {
-					log.Printf("overtime %v %p", k, w)
-					// 终止协程
+					// 终止协程，但是这个时候，可能任务还是在执行中，执行超时，这时候<-Done会被阻塞
 					w.Cancel()
 					// 清理Free
 					w.Status = WorkerStatusStop
+					// 上面两步，会worker执行完任务后，就被释放
 				}
 			}
 
@@ -98,7 +97,6 @@ func (g *GoPool) dispatchTask() {
 	for {
 		select {
 		case t := <-g.TaskEntryChan:
-			log.Printf("dispatch task %p", t)
 			// 获取worker
 			w := g.fetchWorker()
 			// 将任务扔给worker
@@ -123,7 +121,7 @@ func (g *GoPool) fetchWorker() *worker {
 					Pool:         g,
 					StartTime:    time.Now(),
 					LastWorkTime: time.Now(),
-					TaskChan:     make(chan *Task, 1),
+					TaskChan:     make(chan Task, 1),
 					Ctx:          context.Background(),
 					Status:       WorkerStatusLive,
 				}
@@ -138,8 +136,6 @@ func (g *GoPool) fetchWorker() *worker {
 				g.Lock.Unlock()
 
 				g.FreeWorkerChan <- w
-
-				log.Printf("worker create %p", w)
 			}
 		}
 	}
@@ -148,11 +144,11 @@ func (g *GoPool) fetchWorker() *worker {
 // 添加任务
 func (g *GoPool) addTask(t Task) {
 	// 将任务放到入口任务队列
-	g.TaskEntryChan <- &t
+	g.TaskEntryChan <- t
 }
 
 // 接受任务
-func (w *worker) accept(t *Task) {
+func (w *worker) accept(t Task) {
 	// 每个worker自己的工作队列
 	w.TaskChan <- t
 }
@@ -162,13 +158,12 @@ func (w *worker) execute(ctx context.Context) {
 	for {
 		select {
 		case t := <-w.TaskChan:
-			// 执行
-			(*t)()
+			// 执行，如果任务执行时间很长，那么会阻塞下一个case
+			t()
 			// 记录工作状态
 			w.LastWorkTime = time.Now()
 			w.Pool.FreeWorkerChan <- w
 		case <-ctx.Done():
-			log.Printf("worker done %p", w)
 			return
 		}
 	}

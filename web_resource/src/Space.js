@@ -359,7 +359,7 @@ function drawMatrix(x = canvas.width / 2, y = canvas.height / 2) {
 
 
 // 绘制矩形
-function drawMatrixGuest(x = canvas.width / 2, y = canvas.height / 2, e_x, e_y, name, gender) {
+function drawMatrixGuest(x = canvas.width / 2, y = canvas.height / 2, e_x, e_y, name, gender, city) {
     // 矩形
     // ctx.fillStyle = "rgb(200,0,0)"
     // ctx.fillRect(x, y, 50, 30);
@@ -392,6 +392,7 @@ function drawMatrixGuest(x = canvas.width / 2, y = canvas.height / 2, e_x, e_y, 
         ctx.fillStyle = "rgb(0,191,255)";
     }
     ctx.fillText(name, x - 8, y + 20)
+    ctx.fillText(city, x - 8, y + 40)
 
 }
 
@@ -607,7 +608,9 @@ function createGuestBot() {
                 guest_bots[i].msg = '';
             }
         }else if (i !== bot_status.bot_id && isShowGuest(guest_bots[i].r_x + guest_bots[i].x - real_top_left_poi.x, guest_bots[i].r_y + guest_bots[i].y - real_top_left_poi.y)) {
-            drawMatrixGuest(guest_bots[i].r_x + guest_bots[i].x - real_top_left_poi.x, guest_bots[i].r_y + guest_bots[i].y - real_top_left_poi.y, guest_bots[i].r_x + guest_bots[i].e_x - real_top_left_poi.x, guest_bots[i].r_y + guest_bots[i].e_y - real_top_left_poi.y, guest_bots[i].name, guest_bots[i].gender)
+            drawMatrixGuest(guest_bots[i].r_x + guest_bots[i].x - real_top_left_poi.x, guest_bots[i].r_y + guest_bots[i].y - real_top_left_poi.y,
+                guest_bots[i].r_x + guest_bots[i].e_x - real_top_left_poi.x, guest_bots[i].r_y + guest_bots[i].e_y - real_top_left_poi.y,
+                guest_bots[i].name, guest_bots[i].gender,guest_bots[i].pos_info.getCity())
             // console.info(guest_bots[i].show_message_box)
             showGuestMessage(i)
             // console.info(guest_bots[i].show_message_box)
@@ -823,10 +826,10 @@ function createWebSocket() {
                 msg: bot_list[i].getMsg(),
                 name: bot_list[i].getName(),
                 gender: bot_list[i].getGender(),
-                // show_message_box: !!guest_bots[i].show_message_box ? guest_bots[i].show_message_box:undefined
+                pos_info : bot_list[i].getPosInfo(),
             };
 
-            addMessageToChatWindow(bot_list[i].getName(),bot_list[i].getMsg())
+            addMessageToChatWindow(guest_bots[bot_list[i].getBotId()])
         }
     };
 
@@ -896,7 +899,7 @@ function initLocalStorage() {
     if (name !== null && name !== "") {
         bot_status.name = name;
     } else {
-        bot_status.name = 'guest' + Math.random().toString(36)
+        bot_status.name = 'Guest' + Math.random().toString(36).substr(2)
     }
 
     var gender = localStorage.getItem('star_gender');
@@ -1015,7 +1018,8 @@ function createGlobalChatWindow() {
     document.body.appendChild(globalChatWindow)
 }
 
-function addMessageToChatWindow(name,message) {
+
+function addSystemMessageToChatWindow(name,message) {
     if (message.trim() === ""){
         return
     }
@@ -1025,12 +1029,30 @@ function addMessageToChatWindow(name,message) {
         "");
     mDiv.innerHTML = ""+
         "<div>" +
-        "<span style='color: darkgreen'>"+name+"：</span>" +message
+        "<span style='color: darkred'>"+name+"：</span>" +message
     "</div>"
     "";
 
     globalChatWindow.appendChild(mDiv)
+    globalChatWindow.scrollTop = globalChatWindow.scrollHeight
+}
 
+function addMessageToChatWindow(bot) {
+    if (bot.msg.trim() === ""){
+        return
+    }
+    var mDiv = document.createElement("div")
+    mDiv.setAttribute("style","" +
+        "margin:2px;" +
+        "");
+    mDiv.innerHTML = ""+
+        "<div>" +
+        "<span style='color: lightseagreen'>["+bot.pos_info.getCity()+bot.pos_info.getIsp()+"]</span>" +
+        "<span style='color: darkgreen'>@"+bot.name+"：</span>" +bot.msg
+    "</div>"
+    "";
+
+    globalChatWindow.appendChild(mDiv)
     globalChatWindow.scrollTop = globalChatWindow.scrollHeight
 }
 
@@ -1046,7 +1068,7 @@ function welcome() {
         "前端 Vue+canvas+websocket+protobuf，后端 Golang+websocket+protobuf+goroutine",
     ]
     for (var id in str) {
-        addMessageToChatWindow("系统管理员",str[id])
+        addSystemMessageToChatWindow("管理员",str[id])
     }
 }
 

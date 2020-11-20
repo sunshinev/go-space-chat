@@ -1,31 +1,42 @@
 syntax = "proto3";
 
+option go_package = ".;star";
+
+message pInfo {
+    int32 city_id   = 1;
+    string country  = 2;
+    string region   = 3;
+    string province = 4;
+    string city     = 5;
+    string isp      = 6;
+}
 
 message botStatusRequest {
     string bot_id = 1;
-    float x = 2;
-    float y = 3;
-    float eye_x = 4;
-    float eye_y = 5;
-    string msg = 6;
-    float real_x = 7;
-    float real_y = 8;
+    float x       = 2;
+    float y       = 3;
+    float eye_x   = 4;
+    float eye_y   = 5;
+    string msg    = 6;
+    float real_x  = 7;
+    float real_y  = 8;
 
     enum status_type {
-        waiting = 0;
+        waiting    = 0;
         connecting = 1;
-        close = 2;
+        close      = 2;
     }
 
     status_type status = 9;
-    string name = 10;
+    string name        = 10;
 
     enum gender_type {
-        man = 0;
+        man   = 0;
         woman = 1;
     }
 
     gender_type gender = 11;
+    pInfo pos_info     = 12;
 }
 
 message botStatusResponse {

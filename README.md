@@ -56,6 +56,16 @@ go run main.go -socket_server 9001
 2. 如何实现游戏状态同步？
 
 
+## proto 文件生成指令
+```
+protoc -I ./ *.proto --go_out=.
+```
+
+```
+protoc --js_out=import_style=commonjs,binary:. *.proto
+
+```
+
 
 ## 相关链接
 

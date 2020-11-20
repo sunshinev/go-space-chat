@@ -22,6 +22,7 @@ type Core struct {
 	Clients           sync.Map // 客户端集合
 	TextSafer         component.TextSafe
 	loginChart        *component.LoginChart
+	IpSearch          *component.IpSearch
 }
 
 // 广播消息缓冲通道
@@ -42,15 +43,10 @@ func (c *Core) Run() {
 	if err != nil {
 		log.Fatalf("text safe new err %v", err)
 	}
-
 	// 初始日志记录
 	c.loginChart = component.InitLoginChart()
-
-	// 启动api服务
-	SafeGo(func() {
-
-		//_ = http.ListenAndServe(":8081", nil)
-	})
+	// 初始化ip转换
+	c.IpSearch = component.InitIpSearch()
 
 	// 启动web服务
 	SafeGo(func() {
@@ -71,7 +67,7 @@ func (c *Core) Run() {
 	})
 	// pprof 性能
 	SafeGo(func() {
-		log.Println(http.ListenAndServe("localhost:6060", nil))
+		log.Println(http.ListenAndServe(":6060", nil))
 	})
 
 	// 监听websocket
@@ -117,8 +113,6 @@ func (c *Core) listenWebsocket(conn *websocket.Conn) {
 			// 写入空
 			cInfo = &pb.BotStatusRequest{}
 		}
-
-		// 类型断言
 		clientInfo, ok := cInfo.(*pb.BotStatusRequest)
 		if !ok {
 			log.Printf("assert sync map pb.BotStatusRequest err %v", clientInfo)
@@ -128,25 +122,28 @@ func (c *Core) listenWebsocket(conn *websocket.Conn) {
 		// 读取消息
 		_, message, err := conn.ReadMessage()
 		if err != nil {
-			log.Printf("read message error,client: %v break, ip: %v, err:%v", clientInfo.BotId, conn.LocalAddr(), err)
+			log.Printf("read message error,client: %v break, ip: %v, err:%v", clientInfo.BotId, conn.RemoteAddr(), err)
+			messages <- &pb.BotStatusRequest{
+				BotId:   clientInfo.BotId,
+				Name:    clientInfo.Name,
+				Msg:     "我下线了~拜拜~",
+				PosInfo: clientInfo.PosInfo,
+			}
 			// 广播关闭连接
 			messages <- &pb.BotStatusRequest{
 				BotId:  clientInfo.BotId,
 				Status: pb.BotStatusRequest_close,
 			}
-			messages <- &pb.BotStatusRequest{
-				BotId: clientInfo.BotId,
-				Name:  "系统管理员",
-				Msg:   "用户@" + clientInfo.Name + " 下线了",
-			}
-			// 清除连接
+			// 清除用户
 			c.Clients.Delete(conn)
+			// 关闭连接
 			err = conn.Close()
 			if err != nil {
 				log.Printf("close websocket err %v", err)
 			}
 			break
 		}
+		// 消息读取成功，解析消息
 		// 使用protobuf解析
 		pbr := &pb.BotStatusRequest{}
 		err = proto.Unmarshal(message, pbr)
@@ -161,19 +158,37 @@ func (c *Core) listenWebsocket(conn *websocket.Conn) {
 		pbr.Msg = html.EscapeString(pbr.Msg)
 		pbr.Name = html.EscapeString(pbr.Name)
 
-		// 初始化链接的ID
+		// 如果是新用户初始化链接的ID
 		if clientInfo.BotId == "" {
+			// 获取地理位置
+			posInfo := pb.PInfo{}
+			pinfo, err := c.IpSearch.Search(conn.RemoteAddr().String())
+			if err != nil {
+				log.Printf("ip search err %v", err)
+			} else {
+				posInfo = pb.PInfo{
+					CityId:   int32(pinfo.CityId),
+					Country:  pinfo.Country,
+					Region:   pinfo.Region,
+					Province: pinfo.Province,
+					City:     pinfo.City,
+					Isp:      pinfo.ISP,
+				}
+			}
 			c.Clients.Store(conn, &pb.BotStatusRequest{
-				BotId:  pbr.GetBotId(),
-				Name:   pbr.GetName(),
-				Status: pb.BotStatusRequest_connecting,
+				BotId:   pbr.GetBotId(),
+				Name:    pbr.GetName(),
+				Status:  pb.BotStatusRequest_connecting,
+				PosInfo: &posInfo,
 			})
-			// 对新用户进行上线提示
-			pbr.Msg = "用户@" + pbr.Name + "  上线啦"
-			pbr.Name = "系统管理员"
+			// 新用户进行上线提示
+			pbr.Msg = "我上线啦~大家好呀"
+			pbr.PosInfo = &posInfo
 			// 新用户上线，记录次数
 			c.loginChart.Entry()
-
+		} else {
+			// 老用户直接从clients获取pos信息
+			pbr.PosInfo = clientInfo.PosInfo
 		}
 		// 广播队列
 		messages <- pbr
@@ -192,15 +207,6 @@ func (c *Core) broadcast() {
 		go func(m pb.BotStatusRequest) {
 			// 遍历所有客户
 			c.Clients.Range(func(connKey, bs interface{}) bool {
-
-				//bot, ok := bs.(*pb.BotStatusRequest)
-				//if !ok {
-				//	return true
-				//}
-				// 不给自己发消息
-				//if bot.BotId == m.BotId {
-				//	return true
-				//}
 
 				resp := &pb.BotStatusResponse{
 					BotStatus: []*pb.BotStatusRequest{&m},

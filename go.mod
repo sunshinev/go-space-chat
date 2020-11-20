@@ -7,6 +7,7 @@ require (
 	github.com/antlinker/go-dirtyfilter v1.2.0
 	github.com/golang/protobuf v1.4.0
 	github.com/gorilla/websocket v1.4.2
+	github.com/lionsoul2014/ip2region v2.2.0-release+incompatible
 	google.golang.org/protobuf v1.21.0
 	gopkg.in/mgo.v2 v2.0.0-20190816093944-a6b53ec6cb22 // indirect
 )
