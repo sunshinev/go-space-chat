@@ -61,11 +61,11 @@ export default {
         data: {
           labels: this.xlist,
           datasets: [{
-            backgroundColor: 'rgba(255, 99, 132, 0.2)',
-            borderColor: 'rgba(255, 99, 132, 0.2)',
+            backgroundColor: 'rgba(255, 99, 132, 0.5)',
+            borderColor: 'rgba(255, 99, 132, 0.5)',
             data: this.ylist,
             label: '',
-            fill: '',
+            fill: 'start',
 
           }]
         },
