@@ -8,7 +8,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "browserify": "^16.5.1",
     "chart.js": "^2.9.4",
     "core-js": "^3.6.4",
