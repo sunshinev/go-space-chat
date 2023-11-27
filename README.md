@@ -2,9 +2,6 @@
 
 ![d2139b33a9868d1f17a471201d1272371588868902.jpg](https://cdn.jsdelivr.net/gh/sunshinev/remote_pics/d2139b33a9868d1f17a471201d1272371588868902.jpg)
 
-## Demo
-
-http://chat.osinger.com/
 
 ## 特色
 1. 支持性别修改、并且有颜色替换
@@ -24,8 +21,16 @@ http://chat.osinger.com/
 3. 按下`space` 空格可以输入消息，按下回车发送消息
 4. 左上角按钮可以输入名称，点击空白处名称生效
 
+## docker（推荐）
+最新支持使用docker-compose的方式来启动服务，克隆项目后，直接执行下面命令
+```
+docker-compose up -d
+```
 
-## 运行
+访问`http://localhost:8081`
+
+
+## 本地运行
 
 ```$xslt
 go run main.go

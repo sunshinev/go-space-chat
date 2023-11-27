@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  my_debian_container:
+    image: debian:latest
+    tty: true  # 保持控制台连接，方便执行命令
+
+    ports:
+      - "8081:80"  # 映射容器的8080端口到主机的8080端口
+      - "9001:9000"  # 映射容器的3000端口到主机的3000端口
+
+    # 安装依赖的软件包和Go语言
+    command: >
+      bash -c "
+      apt-get update &&
+      apt-get install -y wget git &&
+      wget https://golang.org/dl/go1.17.2.linux-arm64.tar.gz &&
+      tar -C /usr/local -xzf go1.17.2.linux-arm64.tar.gz &&
+      export PATH=$PATH:/usr/local/go/bin &&
+      go version &&
+      cd ~ &&
+      git clone https://github.com/sunshinev/go-space-chat.git &&
+      cd go-space-chat &&
+      go run main.go  # 在 Git 项目的根目录下运行 Go 代码
+      "
+
+    environment:
+      - GO111MODULE=on  # 设置Go的模块支持

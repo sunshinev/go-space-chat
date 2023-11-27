@@ -204,12 +204,12 @@ func (c *Core) broadcast() {
 		}
 
 		// 读取到之后进行广播，启动协程，是为了立即处理下一条msg
-		go func(m pb.BotStatusRequest) {
+		go func(m *pb.BotStatusRequest) {
 			// 遍历所有客户
 			c.Clients.Range(func(connKey, bs interface{}) bool {
 
 				resp := &pb.BotStatusResponse{
-					BotStatus: []*pb.BotStatusRequest{&m},
+					BotStatus: []*pb.BotStatusRequest{m},
 				}
 				b, err := proto.Marshal(resp)
 				if err != nil {
@@ -232,7 +232,7 @@ func (c *Core) broadcast() {
 				}
 				return true
 			})
-		}(*msg)
+		}(msg)
 	}
 }
 
