@@ -2,12 +2,14 @@ package component
 
 import (
 	"fmt"
-	"go-space-chat/config"
 	"math"
 	"sync"
 	"time"
+
+	"github.com/sunshinev/go-space-chat/config"
 )
 
+// LoginChart ...
 type LoginChart struct {
 	today string // 日志记录的日期，只保留一天
 }
@@ -47,7 +49,7 @@ func (s *LoginChart) Entry() {
 // 消费数据
 func (s *LoginChart) consume() {
 	// 用chan 主要是为了防止并发add
-	for _ = range entryChannel {
+	for range entryChannel {
 		s.add()
 	}
 }
@@ -98,7 +100,7 @@ type ChartData struct {
 	Y int32  `json:"y"`
 }
 
-// 获取所有数据
+// ChartDataApi 获取所有数据
 func (s *LoginChart) FetchAllData() []ChartData {
 
 	xSlice := []string{}

@@ -1,13 +1,13 @@
 package main
 
 import (
-	"go-space-chat/core"
 	"log"
 	_ "net/http/pprof"
+
+	"github.com/sunshinev/go-space-chat/core"
 )
 
 func main() {
 	log.SetFlags(log.Lshortfile | log.LstdFlags)
-	c := &core.Core{}
-	c.Run()
+	core.NewCore().Run()
 }

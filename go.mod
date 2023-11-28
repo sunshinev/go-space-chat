@@ -1,4 +1,4 @@
-module go-space-chat
+module github.com/sunshinev/go-space-chat
 
 go 1.13
 

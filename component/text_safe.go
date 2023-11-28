@@ -7,9 +7,8 @@ import (
 	"os"
 	"strings"
 
-	"github.com/antlinker/go-dirtyfilter/store"
-
 	filter "github.com/antlinker/go-dirtyfilter"
+	"github.com/antlinker/go-dirtyfilter/store"
 )
 
 type TextSafe struct {
@@ -51,7 +50,6 @@ func (s *TextSafe) NewFilter() error {
 }
 
 func (s *TextSafe) Filter(filterText string) string {
-
 	result, err := s.filter.Filter().Filter(filterText, '*', '@')
 	if err != nil {
 		log.Print(err)
