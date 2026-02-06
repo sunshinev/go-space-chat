@@ -32,20 +32,31 @@ docker-compose up -d
 
 ## 本地运行
 
-```$xslt
-go run main.go
+建议使用非特权端口启动（例如 8081），避免 macOS/Linux 上 `:80` 需要管理员权限。
+
+```bash
+go run main.go -web_addr :8081 -socket_addr :9000
 ```
 
-该命令会启动web-server作为静态服务，默认80端口，如果需要修改端口，用下面的命令
-```
-go run main.go -web_server 8081
+- Web 静态服务（默认目录：`web_resource/dist/`）：`http://localhost:8081`
+- WebSocket 地址：`ws://localhost:9000/ws`
+- 统计接口：`http://localhost:8081/login_charts`
+
+如果你需要修改端口：
+
+```bash
+go run main.go -web_addr :8082 -socket_addr :9001
 ```
 
-项目启动默认websocket服务端口为9000端口，如果需要修改
+注意：如果修改了 WebSocket 端口，需要同步修改前端里建立 WebSocket 连接的端口（`web_resource/src` 相关代码）。
+
+### 依赖下载（Go Modules）
+
+如果本地网络环境导致 `go run/go build` 下载依赖失败，可以临时指定 Go 模块代理：
+
+```bash
+GOPROXY=https://proxy.golang.com.cn,direct GOSUMDB=off go run main.go -web_addr :8081 -socket_addr :9000
 ```
-go run main.go -socket_server 9001
-```
-注意：如果修改websocket端口，同时需要修改js里面的socket端口
 
 
 ## 技术工具

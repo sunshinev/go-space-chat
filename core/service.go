@@ -36,10 +36,11 @@ var messages = make(chan *pb.BotStatusRequest, 1000)
 
 func (s *Core) Run() {
 	// 启动参数
-	s.SocketAddr = *flag.String("socket_addr", ":9000", "socket address")
-	s.WebAddr = *flag.String("web_addr", ":80", "http service address")
-
+	socketAddr := flag.String("socket_addr", ":9000", "socket address")
+	webAddr := flag.String("web_addr", ":80", "http service address")
 	flag.Parse()
+	s.SocketAddr = *socketAddr
+	s.WebAddr = *webAddr
 
 	log.Printf("socket port %s", s.SocketAddr)
 	log.Printf("web port %s", s.WebAddr)
