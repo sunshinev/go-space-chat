@@ -291,7 +291,7 @@ function drawn(ctx, points = []) {
     for (var i in points) {
         var p = pointConvert(points[i].x, points[i].y, points[i].z, points[i].c, points[i].s);
         // 这里要做一些舍弃动作,视野之外的粒子，不予绘制
-        if (p.x < canvas.width || p.y < canvas.height) {
+        if (p.x >= 0 && p.x <= canvas.width && p.y >= 0 && p.y <= canvas.height) {
             drawnPoint(ctx, p.x, p.y, p.c, p.s)
         }
     }
@@ -401,8 +401,20 @@ function moveEye(x, y, r) {
 
     var r_pupil = 5;
 
-    var e_x = (x - mouse_poi.x) * (r - r_pupil) / Math.sqrt(Math.pow(x - mouse_poi.x, 2) + Math.pow(y - mouse_poi.y, 2));
-    var e_y = (y - mouse_poi.y) * (r - r_pupil) / Math.sqrt(Math.pow(x - mouse_poi.x, 2) + Math.pow(y - mouse_poi.y, 2));
+    var dx = x - mouse_poi.x;
+    var dy = y - mouse_poi.y;
+    var dist = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+    var e_x;
+    var e_y;
+
+    if (dist === 0) {
+        // 鼠标在眼睛中心时，默认向上看，避免除零
+        e_x = 0;
+        e_y = r - r_pupil;
+    } else {
+        e_x = dx * (r - r_pupil) / dist;
+        e_y = dy * (r - r_pupil) / dist;
+    }
 
 
     if (move_direction.up) {
@@ -586,7 +598,9 @@ function createMessageBubble(value) {
     show_message_box.appendChild(bubble)
 
     setTimeout(() => {
-        show_message_box.removeChild(bubble)
+        if (show_message_box && bubble.parentNode === show_message_box) {
+            show_message_box.removeChild(bubble)
+        }
     }, 1000 * 8);
 }
 
@@ -675,7 +689,9 @@ function createMessageBubbleGuest(name, value) {
     show_message_box.appendChild(bubble)
 
     setTimeout(() => {
-        show_message_box.removeChild(bubble)
+        if (show_message_box && bubble.parentNode === show_message_box) {
+            show_message_box.removeChild(bubble)
+        }
     }, 1000 * 15);
 }
 
@@ -863,7 +879,7 @@ function sendStatusByWs(msg = '') {
     if (msg === "") {
         if (rateKey) {
             rateKey = false
-            setTimeout(function(){rateKey = true},30)
+            setTimeout(function(){rateKey = true},50)
         }else {
             return
         }

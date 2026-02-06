@@ -53,6 +53,14 @@ alwaysApply: true
   - 记录哪些错误必须向上抛出，哪些可以吞掉并打印日志，以及统一的日志格式和敏感信息处理要求。
 - **前端交互与用户体验（如适用）**
   - 记录前端交互上的统一约定，比如提示文案风格、错误展示方式等。
+- **前端构建与依赖管理（如适用）**
+  - **问题简述**：`yarn install` / `yarn build` 失败，常见原因是 `yarn.lock` 将下载地址锁定到已废弃/证书异常的镜像域名，或在 production 模式下未安装 devDependencies（导致 `vue-cli-service` 缺失），以及旧依赖对新 Node 版本存在 engine 限制。
+  - **影响范围**：`web_resource/` 前端依赖安装与打包流程（Vue CLI 4 / Yarn v1 项目尤甚）。
+  - **正确做法 / 解决方案**：
+    - 避免提交把 `resolved` 锁死到过期镜像（如 `registry.npm.taobao.org`）的 `yarn.lock`；必要时删除并重新安装生成新的 lock。
+    - 用项目级 `.npmrc` 固定可用 registry（例如 `https://registry.npmmirror.com/` 或 `https://registry.npmjs.org/`），避免依赖开发者全局配置。
+    - 打包需要 devDependencies 时，确保安装时显式开启：`yarn install --production=false`。
+    - 若遇到依赖 engine 与本机 Node 不兼容：优先使用项目约定的 Node LTS（建议补充 `.nvmrc`）；临时方案可用 `yarn install --ignore-engines`，但应评估构建/运行风险。
 - **部署与运维相关约定**
   - 记录与配置文件、环境变量、监控指标等相关的经验和踩坑记录。
 
