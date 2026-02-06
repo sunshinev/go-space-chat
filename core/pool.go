@@ -62,8 +62,9 @@ func (g *GoPool) fireWorker() {
 		select {
 		// 10秒执行一次
 		case <-time.After(10 * time.Second):
+			g.Lock.Lock()
 			for _, w := range g.Workers {
-				if time.Now().Sub(w.LastWorkTime) > g.MaxWorkerIdleTime {
+				if time.Since(w.LastWorkTime) > g.MaxWorkerIdleTime {
 					// 终止协程，但是这个时候，可能任务还是在执行中，执行超时，这时候<-Done会被阻塞
 					w.Cancel()
 					// 清理Free
@@ -71,8 +72,6 @@ func (g *GoPool) fireWorker() {
 					// 上面两步，会worker执行完任务后，就被释放
 				}
 			}
-
-			g.Lock.Lock()
 			g.Workers = g.cleanWorker(g.Workers)
 			g.Lock.Unlock()
 		}
@@ -82,7 +81,7 @@ func (g *GoPool) fireWorker() {
 // 递归清理无用worker
 func (g *GoPool) cleanWorker(workers []*worker) []*worker {
 	for k, w := range workers {
-		if time.Now().Sub(w.LastWorkTime) > g.MaxWorkerIdleTime {
+		if time.Since(w.LastWorkTime) > g.MaxWorkerIdleTime {
 			workers = append(workers[:k], workers[k+1:]...) // 删除中间1个元素
 			return g.cleanWorker(workers)
 		}
@@ -116,6 +115,7 @@ func (g *GoPool) fetchWorker() *worker {
 			}
 		default:
 			// 创建新的worker
+			g.Lock.Lock()
 			if int32(len(g.Workers)) < g.MaxWorkerNum {
 				w := &worker{
 					Pool:         g,
@@ -131,11 +131,14 @@ func (g *GoPool) fetchWorker() *worker {
 				// 接到任务自己去执行吧
 				go w.execute(ctx)
 
-				g.Lock.Lock()
 				g.Workers = append(g.Workers, w)
 				g.Lock.Unlock()
 
 				g.FreeWorkerChan <- w
+			} else {
+				// 已达最大 worker 数量，避免忙等，稍作休眠
+				g.Lock.Unlock()
+				time.Sleep(time.Millisecond)
 			}
 		}
 	}

@@ -45,6 +45,12 @@ alwaysApply: true
 
 - **Go 代码 & 并发模式**
   - 记录典型的 goroutine 使用方式、channel 模式、锁的使用规范，以及与 gorilla/websocket、protobuf 等库相关的常见坑和最佳实践。
+  - **问题简述**：自研 goroutine 池中对 `[]*worker` 的读/写没有统一加锁，以及在 worker 数量达到上限时通过 `for { select { default: ... } }` 忙等，可能导致数据竞争和 CPU 空转。
+  - **影响范围**：`core/pool.go` 中的 `GoPool`、`SafeGo` 及后续所有基于该池调度的后台任务。
+  - **正确做法 / 解决方案**：
+    - 任何对共享切片（如 `g.Workers`）的读写都必须在同一把互斥锁下完成，避免一处加锁、一处裸读导致数据竞争。
+    - 在任务分发逻辑中避免使用无休眠的 `default` 分支形成忙等；当 worker 数量已达上限时，应阻塞等待空闲 worker，或至少做短暂 `time.Sleep` 降低 CPU 占用。
+    - 如无强需求，自研 goroutine 池应保持极简逻辑；需要更复杂能力（预热、限流、统计等）时，可优先评估成熟开源库（如 `github.com/panjf2000/ants`）而非从零实现复杂调度器。
 - **性能优化经验**
   - 记录通过 profiling / benchmark 得到的通用优化经验（例如：避免在热路径上频繁分配、如何复用 protobuf 消息等）。
 - **接口设计与数据结构**

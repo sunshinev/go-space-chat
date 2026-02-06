@@ -210,36 +210,33 @@ func (s *Core) broadcast() {
 			log.Printf("%s : %s", msg.BotId+":"+msg.Name, msg.Msg)
 		}
 
-		// 读取到之后进行广播，启动协程，是为了立即处理下一条msg
-		go func(m *pb.BotStatusRequest) {
-			// 遍历所有客户
-			s.Clients.Range(func(connKey, bs interface{}) bool {
+		// 单次构造并序列化响应，避免在每个连接上重复 Marshal
+		resp := &pb.BotStatusResponse{
+			BotStatus: []*pb.BotStatusRequest{msg},
+		}
+		b, err := proto.Marshal(resp)
+		if err != nil {
+			log.Printf("proto marshal error %v %+v", err, resp)
+			continue
+		}
 
-				resp := &pb.BotStatusResponse{
-					BotStatus: []*pb.BotStatusRequest{m},
-				}
-				b, err := proto.Marshal(resp)
-				if err != nil {
-					log.Printf("proto marshal error %v %+v", err, resp)
-					return true
-				}
-
-				// 二进制发送
-				conn, ok := connKey.(*websocket.Conn)
-				if !ok {
-					log.Printf("assert connkey websocket.Conn err %v", conn)
-					return true
-				}
-				// 防止并发写
-				s.ConnMutex.Lock()
-				err = conn.WriteMessage(websocket.BinaryMessage, b)
-				s.ConnMutex.Unlock()
-				if err != nil {
-					log.Printf("conn write message err %v", err)
-				}
+		// 遍历所有客户并写入，写入仍通过全局锁串行化，保证单连接写安全
+		s.Clients.Range(func(connKey, _ interface{}) bool {
+			// 二进制发送
+			conn, ok := connKey.(*websocket.Conn)
+			if !ok {
+				log.Printf("assert connkey websocket.Conn err: %T", connKey)
 				return true
-			})
-		}(msg)
+			}
+
+			s.ConnMutex.Lock()
+			err = conn.WriteMessage(websocket.BinaryMessage, b)
+			s.ConnMutex.Unlock()
+			if err != nil {
+				log.Printf("conn write message err %v", err)
+			}
+			return true
+		})
 	}
 }
 
