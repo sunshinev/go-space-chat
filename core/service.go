@@ -191,8 +191,8 @@ func (s *Core) listenWebsocket(conn *websocket.Conn) {
 			// 新用户进行上线提示
 			pbr.Msg = "我上线啦~大家好呀"
 			pbr.PosInfo = &posInfo
-			// 新用户上线，记录次数
-			s.loginChart.Entry()
+			// 新用户上线，记录次数（同一 botId 当天只统计一次）
+			s.loginChart.Entry(pbr.GetBotId())
 		} else {
 			// 老用户直接从clients获取pos信息
 			pbr.PosInfo = clientInfo.PosInfo

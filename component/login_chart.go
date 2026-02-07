@@ -11,14 +11,16 @@ import (
 
 // LoginChart ...
 type LoginChart struct {
-	today string // 日志记录的日期，只保留一天
+	today      string          // 日志记录的日期，只保留一天
+	seenLocker sync.Mutex      // 去重锁
+	seenBotIDs map[string]bool // 当天已记录过的 botId
 }
 
 // 十分钟为粒度
 var timeSpan float64 = 10
 
-// 入口通道
-var entryChannel = make(chan int32, 100)
+// 入口通道（按 botId 去重）
+var entryChannel = make(chan string, 100)
 
 // 数据记录
 var records sync.Map
@@ -33,7 +35,8 @@ type posData struct {
 // 初始化
 func InitLoginChart() *LoginChart {
 	login := &LoginChart{
-		today: time.Now().Format(config.DateFormatDay),
+		today:      time.Now().Format(config.DateFormatDay),
+		seenBotIDs: make(map[string]bool),
 	}
 	// 开启消费
 	go login.consume()
@@ -41,23 +44,34 @@ func InitLoginChart() *LoginChart {
 	return login
 }
 
-// 入口
-func (s *LoginChart) Entry() {
-	entryChannel <- 1
+// Entry 记录一次“用户上线”事件，同一个 botId 在同一天内只统计一次
+func (s *LoginChart) Entry(botID string) {
+	entryChannel <- botID
 }
 
 // 消费数据
 func (s *LoginChart) consume() {
 	// 用chan 主要是为了防止并发add
-	for range entryChannel {
-		s.add()
+	for botID := range entryChannel {
+		s.add(botID)
 	}
 }
 
 // 添加数据记录
-func (s *LoginChart) add() {
+func (s *LoginChart) add(botID string) {
 	// 是否需要重置数据？
 	s.isClean()
+
+	// 同一天内，同一个 botId 只统计一次
+	if botID != "" {
+		s.seenLocker.Lock()
+		if s.seenBotIDs[botID] {
+			s.seenLocker.Unlock()
+			return
+		}
+		s.seenBotIDs[botID] = true
+		s.seenLocker.Unlock()
+	}
 
 	now := time.Now()
 	min := now.Minute()
@@ -92,6 +106,11 @@ func (s *LoginChart) isClean() {
 			records.Delete(key)
 			return true
 		})
+
+		// 清空当天已记录过的 botId
+		s.seenLocker.Lock()
+		s.seenBotIDs = make(map[string]bool)
+		s.seenLocker.Unlock()
 	}
 }
 

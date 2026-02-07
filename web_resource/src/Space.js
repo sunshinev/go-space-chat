@@ -124,6 +124,8 @@ var guest_show_message_box = {};
 
 // 全局聊天窗口
 var globalChatWindow = document.createElement("div");
+var globalChatWindowBody = null;
+var globalChatStatusBar = null;
 
 // fps
 FPSMeter.theme.dark.count.fontSize = '12px'
@@ -155,8 +157,6 @@ function initCtx() {
 
     // 初始化粒子
     points = randomPoint();
-
-    bot_status.bot_id = Math.random().toString(36).substr(2);
 
     randomPointsUpdate()
 }
@@ -569,6 +569,12 @@ function sendMessage() {
         return false;
     }
 
+    // 如果 WebSocket 尚未就绪，给出友好提示
+    if (!is_ws_open) {
+        addSystemMessageToChatWindow("系统", "当前未连接到服务器，消息未发送。请稍候自动重连或刷新页面重试。");
+        return false;
+    }
+
     var value = input.value;
     input.blur();
 
@@ -819,6 +825,13 @@ function createWebSocket() {
     ws.onopen = function () {
         console.info("ws open")
         is_ws_open = true;
+        if (globalChatStatusBar) {
+            globalChatStatusBar.textContent = "连接正常";
+            globalChatStatusBar.setAttribute("style", "" +
+                "font-size:11px;" +
+                "color:#A0FFB0;");
+        }
+        addSystemMessageToChatWindow("系统", "已连接到 Space 服务器，可以开始聊天。");
     };
 
     ws.onmessage = function (evt) {
@@ -851,6 +864,14 @@ function createWebSocket() {
 
     ws.onclose = function () {
         console.info("ws close")
+        is_ws_open = false;
+        if (globalChatStatusBar) {
+            globalChatStatusBar.textContent = "连接已断开，正在尝试重连…";
+            globalChatStatusBar.setAttribute("style", "" +
+                "font-size:11px;" +
+                "color:#FFD27F;");
+        }
+        addSystemMessageToChatWindow("系统", "与服务器的连接已断开，请检查网络或稍后重试。");
     }
 }
 
@@ -911,6 +932,15 @@ function sendStatusByWs(msg = '') {
 
 
 function initLocalStorage() {
+    // 持久化 bot_id，避免刷新页面后被当成新用户统计多次
+    var botId = localStorage.getItem('star_bot_id');
+    if (botId !== null && botId !== "") {
+        bot_status.bot_id = botId;
+    } else {
+        bot_status.bot_id = Math.random().toString(36).substr(2);
+        localStorage.setItem('star_bot_id', bot_status.bot_id);
+    }
+
     var name = localStorage.getItem('star_name');
     if (name !== null && name !== "") {
         bot_status.name = name;
@@ -1025,11 +1055,48 @@ function createGlobalChatWindow() {
         "bottom:200px;" +
         "width:400px;" +
         "height:70%;" +
-        "color:rgba(200,200,200,0.8);" +
-        "border:1px solid rgba(200,200,200,0.8);"+
+        "color:rgba(200,200,200,0.9);" +
+        "border:1px solid rgba(200,200,200,0.4);" +
+        "background-color:rgba(0,0,0,0.65);" +
         "cursor:default;" +
-        "overflow-y:auto;"+
-        "border-radius:5px;");
+        "border-radius:8px;" +
+        "display:flex;" +
+        "flex-direction:column;" +
+        "overflow:hidden;");
+
+    // 头部：标题 + 连接状态
+    var header = document.createElement("div");
+    header.setAttribute("style", "" +
+        "padding:6px 10px;" +
+        "border-bottom:1px solid rgba(200,200,200,0.2);" +
+        "display:flex;" +
+        "align-items:center;" +
+        "justify-content:space-between;" +
+        "font-size:12px;" +
+        "background:linear-gradient(90deg, rgba(40,20,80,0.9), rgba(20,60,120,0.9));");
+
+    var titleSpan = document.createElement("span");
+    titleSpan.textContent = "Space Chat";
+    titleSpan.setAttribute("style", "font-weight:bold;color:#FFFFFF;");
+
+    globalChatStatusBar = document.createElement("span");
+    globalChatStatusBar.setAttribute("style", "" +
+        "font-size:11px;" +
+        "color:rgba(220,220,220,0.9);");
+    globalChatStatusBar.textContent = "连接中…";
+
+    header.appendChild(titleSpan);
+    header.appendChild(globalChatStatusBar);
+    globalChatWindow.appendChild(header);
+
+    // 内容区域：滚动列表
+    globalChatWindowBody = document.createElement("div");
+    globalChatWindowBody.setAttribute("style", "" +
+        "flex:1;" +
+        "overflow-y:auto;" +
+        "padding:4px 6px;");
+
+    globalChatWindow.appendChild(globalChatWindowBody);
 
     document.body.appendChild(globalChatWindow)
 }
@@ -1049,8 +1116,13 @@ function addSystemMessageToChatWindow(name,message) {
     "</div>"
     "";
 
-    globalChatWindow.appendChild(mDiv)
-    globalChatWindow.scrollTop = globalChatWindow.scrollHeight
+    if (globalChatWindowBody) {
+        globalChatWindowBody.appendChild(mDiv)
+        globalChatWindowBody.scrollTop = globalChatWindowBody.scrollHeight
+    } else {
+        globalChatWindow.appendChild(mDiv)
+        globalChatWindow.scrollTop = globalChatWindow.scrollHeight
+    }
 }
 
 function addMessageToChatWindow(bot) {
@@ -1068,8 +1140,13 @@ function addMessageToChatWindow(bot) {
     "</div>"
     "";
 
-    globalChatWindow.appendChild(mDiv)
-    globalChatWindow.scrollTop = globalChatWindow.scrollHeight
+    if (globalChatWindowBody) {
+        globalChatWindowBody.appendChild(mDiv)
+        globalChatWindowBody.scrollTop = globalChatWindowBody.scrollHeight
+    } else {
+        globalChatWindow.appendChild(mDiv)
+        globalChatWindow.scrollTop = globalChatWindow.scrollHeight
+    }
 }
 
 function welcome() {
